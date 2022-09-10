@@ -41,3 +41,6 @@ local
 
 # vercel
 .vercel
+
+
+/src/utils/firebaseConfig.ts

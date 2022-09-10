@@ -1,3 +1,4 @@
+import { Button } from "@mantine/core";
 import { NextLink } from "@mantine/next";
 
 import { Meta } from "@/layouts/Meta";
@@ -16,7 +17,11 @@ const Index = () => {
       }
     >
       <Carousel />
-      <NextLink href="/verify">Verify</NextLink>
+      <NextLink href="/verify/">Verify</NextLink>
+      <NextLink href="/signup">Signup</NextLink>
+      <Button component={NextLink} href="/hello">
+        Next link button
+      </Button>
     </Main>
   );
 };

@@ -1,8 +1,11 @@
 import { Button, Group, Stepper } from "@mantine/core";
+import { withAuthUser } from "next-firebase-auth";
 import { useState } from "react";
 
 import { Meta } from "@/layouts/Meta";
 import { Main } from "@/templates/Main";
+
+import FirebaseAuthButton from "../../components/firebase/FirebaseAuth";
 
 const Index = () => {
   const [active, setActive] = useState(1);
@@ -23,7 +26,9 @@ const Index = () => {
       <h1>Verify page</h1>
       <Stepper active={active} onStepClick={setActive} breakpoint="sm">
         <Stepper.Step label="First step" description="Create an account">
-          Step 1 content: Create an account
+          Connect to facebook mothafucka
+          <FirebaseAuthButton />
+          Fuyck
         </Stepper.Step>
         <Stepper.Step label="Second step" description="Verify email">
           Step 2 content: Verify email
@@ -45,4 +50,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withAuthUser()(Index);
