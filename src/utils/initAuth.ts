@@ -4,10 +4,11 @@ import firebaseClientInitConfig from "./firebaseConfig";
 
 const initAuth = () => {
   init({
-    authPageURL: "/signup",
+    debug: true,
+    authPageURL: "/signup/login/",
     appPageURL: "/",
-    loginAPIEndpoint: "/api/login", // required
-    logoutAPIEndpoint: "/api/logout", // required
+    loginAPIEndpoint: "/api/login/",
+    logoutAPIEndpoint: "/api/logout/",
     onLoginRequestError: (err) => {
       console.error(err);
     },
@@ -27,7 +28,7 @@ const initAuth = () => {
       maxAge: 12 * 60 * 60 * 24 * 1000, // twelve days
       overwrite: true,
       path: "/",
-      sameSite: "strict",
+      sameSite: "lax",
       secure: false, // set this to false in local (non-HTTPS) development
       signed: true,
     },
