@@ -2,7 +2,7 @@ import { getApp } from "firebase/app";
 import { FacebookAuthProvider, getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 
-import StyledFirebaseAuth from "./authButton";
+import StyledFirebaseAuth from "./StyledFirebaseAuth";
 
 // Note that next-firebase-auth inits Firebase for us,
 // so we don't need to.

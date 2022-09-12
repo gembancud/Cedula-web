@@ -7,6 +7,7 @@ import initAuth from "../../utils/initAuth"; // the module you created above
 initAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+  console.log("Cookie login");
   try {
     await setAuthCookies(req, res);
   } catch (e) {

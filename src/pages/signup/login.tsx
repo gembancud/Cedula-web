@@ -1,15 +1,14 @@
 import {
   AuthAction,
-  useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
 
+import FirebaseAuthButton from "@/components/firebase/FirebaseAuth";
 import { Meta } from "@/layouts/Meta";
 import { Main } from "@/templates/Main";
 
 const Index = () => {
-  const AuthUser = useAuthUser();
   return (
     <Main
       meta={
@@ -19,20 +18,19 @@ const Index = () => {
         />
       }
     >
-      <div>
-        AuthUser: {AuthUser.id}
-        AuthEmail: {AuthUser.email}
-        {/* AuthName: {AuthUser.name} */}
-      </div>
+      Login
+      <FirebaseAuthButton />
     </Main>
   );
 };
 export const getServerSideProps = withAuthUserTokenSSR({
-  // whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  appPageURL: "/about",
 })();
 
 export default withAuthUser({
-  // whenAuthed: AuthAction.REDIRECT_TO_APP,
-  // appPageURL: "/about/",
-  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  whenAuthed: AuthAction.REDIRECT_TO_APP,
+  appPageURL: "/signup/",
+  whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
+  whenUnauthedAfterInit: AuthAction.RENDER,
 })(Index);

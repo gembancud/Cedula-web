@@ -2,11 +2,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { unsetAuthCookies } from "next-firebase-auth";
 
-import initAuth from "../../utils/initAuth";
+import initAuth from "../../utils/initAuth"; // the module you created above
 
 initAuth();
 
 const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+  console.log("Cookie logout");
   try {
     await unsetAuthCookies(req, res);
   } catch (e) {
