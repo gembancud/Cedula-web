@@ -1,15 +1,14 @@
 import {
   AuthAction,
-  useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
 
+import Form from "@/components/mantine/signup/form";
 import { Meta } from "@/layouts/Meta";
 import { Main } from "@/templates/Main";
 
 const Index = () => {
-  const AuthUser = useAuthUser();
   return (
     <Main
       meta={
@@ -19,11 +18,7 @@ const Index = () => {
         />
       }
     >
-      <div>
-        AuthUser: {AuthUser.id}
-        AuthEmail: {AuthUser.email}
-        {/* AuthName: {AuthUser.name} */}
-      </div>
+      <Form />
     </Main>
   );
 };

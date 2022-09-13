@@ -2,6 +2,7 @@ import "../styles/global.css";
 
 import type { ColorScheme } from "@mantine/core";
 import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 
@@ -25,11 +26,13 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         withNormalizeCSS
         emotionCache={rtlCache}
         theme={{
-          dir: "rtl",
+          dir: "ltr",
           colorScheme,
         }}
       >
-        <Component {...pageProps} />
+        <ModalsProvider>
+          <Component {...pageProps} />
+        </ModalsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
