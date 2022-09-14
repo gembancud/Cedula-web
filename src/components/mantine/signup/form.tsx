@@ -17,6 +17,7 @@ import {
 import type { FileWithPath } from "@mantine/dropzone";
 import { useForm, zodResolver } from "@mantine/form";
 import { openConfirmModal } from "@mantine/modals";
+import { useAuthUser } from "next-firebase-auth";
 import { useRef, useState } from "react";
 import { z } from "zod";
 
@@ -32,14 +33,11 @@ const schema = z.object({
 });
 
 const Form = () => {
+  const AuthUser = useAuthUser();
   const [active, setActive] = useState(0);
   const [captchaToken, setCaptchaToken] = useState("");
   const captchaRef = useRef<HCaptcha | null>(null);
   const [files, setFiles] = useState<FileWithPath[]>([]);
-
-  const submitForm = () => {
-    console.log("submitting form", captchaToken);
-  };
 
   const onLoad = () => {
     // this reaches out to the hCaptcha JS API and runs the
@@ -48,19 +46,6 @@ const Form = () => {
     // https://docs.hcaptcha.com/configuration#jsapi
     if (captchaRef != null) captchaRef!.current!.execute();
   };
-  const openModal = () =>
-    openConfirmModal({
-      title: "Please confirm your action",
-      children: (
-        <Text size="sm">
-          This action is so important that you are required to confirm it with a
-          modal. Please click one of these buttons to proceed.
-        </Text>
-      ),
-      labels: { confirm: "Confirm", cancel: "Cancel" },
-      onCancel: () => console.log("Cancel"),
-      onConfirm: () => submitForm,
-    });
 
   const form = useForm({
     validateInputOnChange: ["name", "email"],
@@ -69,7 +54,6 @@ const Form = () => {
       email: "",
       termsOfService: false,
     },
-
     validate: zodResolver(schema),
   });
   const nextStep = () =>
@@ -82,6 +66,49 @@ const Form = () => {
 
   const prevStep = () =>
     setActive((current) => (current > 0 ? current - 1 : current));
+
+  const submitForm = async () => {
+    const authUserToken = await AuthUser.getIdToken();
+
+    const formData = new FormData();
+    formData.append("name", form.values.name);
+    formData.append("email", form.values.email);
+    formData.append("captchaToken", captchaToken);
+    formData.append("authToken", authUserToken!);
+    try {
+      const response = await fetch("http://localhost:3000/user/verify", {
+        method: "POST",
+        headers: {
+          // "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+
+      console.log("success", response);
+    } catch (error) {
+      console.log(error);
+    }
+
+    // If successsful to this
+    nextStep();
+  };
+
+  const openModal = () =>
+    openConfirmModal({
+      title: "Are you sure?",
+      children: (
+        <Text size="sm">
+          You are about to submit the form, please make sure that all the
+          information is correct, for our team to review your application.
+        </Text>
+      ),
+      labels: { confirm: "Confirm", cancel: "Cancel" },
+      onCancel: () => console.log("Cancel"),
+      onConfirm: () => {
+        submitForm();
+      },
+    });
 
   const setFilesCallback = (newfiles: FileWithPath[]) => {
     setFiles(newfiles);
