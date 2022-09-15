@@ -21,6 +21,8 @@ import { useAuthUser } from "next-firebase-auth";
 import { useRef, useState } from "react";
 import { z } from "zod";
 
+import { upload } from "@/utils/cloudinary";
+
 import DropZone from "./dropzone";
 import FileBadge from "./filebadge";
 
@@ -37,7 +39,8 @@ const Form = () => {
   const [active, setActive] = useState(0);
   const [captchaToken, setCaptchaToken] = useState("");
   const captchaRef = useRef<HCaptcha | null>(null);
-  const [files, setFiles] = useState<FileWithPath[]>([]);
+  const [files, setFiles] = useState<string[]>([]);
+  const [filenames, setFilenames] = useState<string[]>([]);
 
   const onLoad = () => {
     // this reaches out to the hCaptcha JS API and runs the
@@ -68,24 +71,55 @@ const Form = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   const submitForm = async () => {
-    const authUserToken = await AuthUser.getIdToken();
+    const authToken = await AuthUser.getIdToken();
 
     const formData = new FormData();
     formData.append("name", form.values.name);
     formData.append("email", form.values.email);
     formData.append("captchaToken", captchaToken);
-    formData.append("authToken", authUserToken!);
+    formData.append("authToken", authToken!);
+    // console.log("files", files);
+    // files.forEach((file) => formData.append("files[]", file));
     try {
-      const response = await fetch("http://localhost:3000/user/verify", {
+      const verifyresponse = await fetch("http://localhost:4000/user/verify", {
         method: "POST",
         headers: {
-          // "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: formData,
+        body: JSON.stringify({
+          name: form.values.name,
+          email: form.values.email,
+          captchaToken,
+          authToken,
+        }),
       });
 
-      console.log("success", response);
+      const data = await verifyresponse.json();
+      if (verifyresponse.ok) {
+        const cloudinaryresponse = await upload(files, data.cloudinary);
+        const uploadresponse = await fetch(
+          "http://localhost:4000/user/upload",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              email: form.values.email,
+              documents: Array.from(
+                cloudinaryresponse.map((res: any) => res.secure_url)
+              ),
+            }),
+          }
+        );
+
+        const uploaddata = await uploadresponse.json();
+        console.log("uploaddata", uploaddata);
+      } else {
+        console.log("response error", data);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -111,13 +145,30 @@ const Form = () => {
     });
 
   const setFilesCallback = (newfiles: FileWithPath[]) => {
-    setFiles(newfiles);
+    const tempfiles = [...files];
+    const tempfilenames = [...filenames];
+    newfiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        tempfiles.push(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    });
+    newfiles.forEach((file) => {
+      tempfilenames.push(file.name);
+    });
+
+    setFiles(tempfiles);
+    setFilenames(tempfilenames);
   };
 
   const removeFile = (index: number) => {
     const newFiles = [...files];
+    const newFilenames = [...filenames];
     newFiles.splice(index, 1);
+    newFilenames.splice(index, 1);
     setFiles(newFiles);
+    setFilenames(newFilenames);
   };
 
   return (
@@ -173,11 +224,11 @@ const Form = () => {
                 padding: "1% 3%",
               }}
             >
-              {files.map((file, index) => {
+              {filenames.map((filename, index) => {
                 return (
                   <FileBadge
                     key={index}
-                    filename={file.name}
+                    filename={filename}
                     index={index}
                     removeFile={removeFile}
                   />
@@ -190,6 +241,7 @@ const Form = () => {
           <Stepper.Step label="Final step" description="Review">
             <Code block mt="xl">
               {JSON.stringify(form.values, null, 2)}
+              {files.length}
             </Code>
             <Center
               sx={{
