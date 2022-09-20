@@ -1,17 +1,16 @@
-import { Meta } from "@/layouts/Meta";
-import { Main } from "@/templates/Main";
+// import type { NextPage } from "next";
+import dynamic from "next/dynamic";
+import { AuthAction, withAuthUser } from "next-firebase-auth";
 
-const About = () => (
-  <Main
-    meta={
-      <Meta
-        title="Verifying Applications"
-        description="This page is for contributing lawyers to assess applications for authenticity"
-      />
-    }
-  >
-    <p>Verifiction page</p>
-  </Main>
-);
+const App = dynamic(() => import("@/components/admin"), { ssr: false });
 
-export default About;
+const Admin = () => {
+  return <App />;
+};
+
+export default withAuthUser({
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  whenAuthed: AuthAction.RENDER,
+  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  LoaderComponent: () => <div>Loading...</div>,
+})(Admin);
