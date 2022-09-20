@@ -1,186 +1,124 @@
-import { useRouter } from 'next/router';
+import {
+  Button,
+  Container,
+  createStyles,
+  Overlay,
+  Text,
+  Title,
+} from "@mantine/core";
+import { NextLink } from "@mantine/next";
+import { withAuthUser, withAuthUserTokenSSR } from "next-firebase-auth";
 
-import { Meta } from '@/layouts/Meta';
-import { Main } from '@/templates/Main';
+import { Meta } from "@/layouts/Meta";
+import { Main } from "@/templates/Main";
 
+const useStyles = createStyles((theme) => ({
+  hero: {
+    position: "relative",
+    backgroundImage:
+      "url(https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  },
+
+  container: {
+    height: 700,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+    paddingBottom: theme.spacing.xl * 6,
+    zIndex: 1,
+    position: "relative",
+
+    [theme.fn.smallerThan("sm")]: {
+      height: 500,
+      paddingBottom: theme.spacing.xl * 3,
+    },
+  },
+
+  title: {
+    color: theme.white,
+    fontSize: 60,
+    fontWeight: 900,
+    lineHeight: 1.1,
+
+    [theme.fn.smallerThan("sm")]: {
+      fontSize: 40,
+      lineHeight: 1.2,
+    },
+
+    [theme.fn.smallerThan("xs")]: {
+      fontSize: 28,
+      lineHeight: 1.3,
+    },
+  },
+
+  description: {
+    color: theme.white,
+    maxWidth: 600,
+
+    [theme.fn.smallerThan("sm")]: {
+      maxWidth: "100%",
+      fontSize: theme.fontSizes.sm,
+    },
+  },
+
+  control: {
+    marginTop: theme.spacing.xl * 1.5,
+
+    [theme.fn.smallerThan("sm")]: {
+      width: "100%",
+    },
+  },
+}));
 const Index = () => {
-  const router = useRouter();
-
+  const { classes } = useStyles();
   return (
     <Main
       meta={
         <Meta
-          title="Next.js Boilerplate Presentation"
-          description="Next js Boilerplate is the perfect starter code for your project. Build your React application with the Next.js framework."
+          title="Cedula landing"
+          description="Cedula is community-driven verification system for Filipinos on Facebook"
         />
       }
     >
-      <a href="https://github.com/ixartz/Next-js-Boilerplate">
-        <img
-          src={`${router.basePath}/assets/images/nextjs-starter-banner.png`}
-          alt="Nextjs starter banner"
+      <div className={classes.hero}>
+        <Overlay
+          gradient="linear-gradient(180deg, rgba(0, 0, 0, 0.25) 0%, rgba(0, 0, 0, .65) 40%)"
+          opacity={1}
+          zIndex={0}
         />
-      </a>
-      <h1 className="text-2xl font-bold">
-        Boilerplate code for your Nextjs project with Tailwind CSS
-      </h1>
-      <p>
-        <span role="img" aria-label="rocket">
-          🚀
-        </span>{' '}
-        Next.js Boilerplate is a starter code for your Next js project by
-        putting developer experience first .{' '}
-        <span role="img" aria-label="zap">
-          ⚡️
-        </span>{' '}
-        Made with Next.js, TypeScript, ESLint, Prettier, Husky, Lint-Staged,
-        VSCode, Netlify, PostCSS, Tailwind CSS.
-      </p>
-      <h2 className="text-lg font-semibold">Next js Boilerplate Features</h2>
-      <p>Developer experience first:</p>
-      <ul>
-        <li>
-          <span role="img" aria-label="fire">
-            🔥
-          </span>{' '}
-          <a href="https://nextjs.org" rel="nofollow">
-            Next.js
-          </a>{' '}
-          for Static Site Generator
-        </li>
-        <li>
-          <span role="img" aria-label="art">
-            🎨
-          </span>{' '}
-          Integrate with{' '}
-          <a href="https://tailwindcss.com" rel="nofollow">
-            Tailwind CSS
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="nail_care">
-            💅
-          </span>{' '}
-          PostCSS for processing Tailwind CSS
-        </li>
-        <li>
-          <span role="img" aria-label="tada">
-            🎉
-          </span>{' '}
-          Type checking Typescript
-        </li>
-        <li>
-          <span role="img" aria-label="pencil2">
-            ✏️
-          </span>{' '}
-          Linter with{' '}
-          <a href="https://eslint.org" rel="nofollow">
-            ESLint
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="hammer_and_wrench">
-            🛠
-          </span>{' '}
-          Code Formatter with{' '}
-          <a href="https://prettier.io" rel="nofollow">
-            Prettier
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="fox_face">
-            🦊
-          </span>{' '}
-          Husky for Git Hooks
-        </li>
-        <li>
-          <span role="img" aria-label="no_entry_sign">
-            🚫
-          </span>{' '}
-          Lint-staged for running linters on Git staged files
-        </li>
-        <li>
-          <span role="img" aria-label="no_entry_sign">
-            🗂
-          </span>{' '}
-          VSCode configuration: Debug, Settings, Tasks and extension for
-          PostCSS, ESLint, Prettier, TypeScript
-        </li>
-        <li>
-          <span role="img" aria-label="robot">
-            🤖
-          </span>{' '}
-          SEO metadata, JSON-LD and Open Graph tags with Next SEO
-        </li>
-        <li>
-          <span role="img" aria-label="robot">
-            ⚙️
-          </span>{' '}
-          <a
-            href="https://www.npmjs.com/package/@next/bundle-analyzer"
-            rel="nofollow"
+        <Container className={classes.container}>
+          <Title className={classes.title}>
+            A verification system for Filipinos on Facebook
+          </Title>
+          <Text className={classes.description} size="xl" mt="xl">
+            Sign up to be a part of the Cedula community and be verified as
+            Filipino on Facebook.
+          </Text>
+
+          <Button
+            variant="gradient"
+            size="xl"
+            radius="xl"
+            component={NextLink}
+            href="/signup"
+            className={classes.control}
           >
-            Bundler Analyzer
-          </a>
-        </li>
-        <li>
-          <span role="img" aria-label="rainbow">
-            🌈
-          </span>{' '}
-          Include a FREE minimalist theme
-        </li>
-        <li>
-          <span role="img" aria-label="hundred">
-            💯
-          </span>{' '}
-          Maximize lighthouse score
-        </li>
-      </ul>
-      <p>Built-in feature from Next.js:</p>
-      <ul>
-        <li>
-          <span role="img" aria-label="coffee">
-            ☕
-          </span>{' '}
-          Minify HTML &amp; CSS
-        </li>
-        <li>
-          <span role="img" aria-label="dash">
-            💨
-          </span>{' '}
-          Live reload
-        </li>
-        <li>
-          <span role="img" aria-label="white_check_mark">
-            ✅
-          </span>{' '}
-          Cache busting
-        </li>
-      </ul>
-      <h2 className="text-lg font-semibold">Our Stater code Philosophy</h2>
-      <ul>
-        <li>Minimal code</li>
-        <li>SEO-friendly</li>
-        <li>
-          <span role="img" aria-label="rocket">
-            🚀
-          </span>{' '}
-          Production-ready
-        </li>
-      </ul>
-      <p>
-        Check our GitHub project for more information about{' '}
-        <a href="https://github.com/ixartz/Next-js-Boilerplate">
-          Nextjs Boilerplate
-        </a>
-        . You can also browse our{' '}
-        <a href="https://creativedesignsguru.com/category/nextjs/">
-          Premium NextJS Templates
-        </a>{' '}
-        on our website to support this project.
-      </p>
+            Get started
+          </Button>
+        </Container>
+      </div>
+      {/* <Carousel /> */}
+      {/* <NextLink href="/verify/">Verify</NextLink> */}
+      {/* <NextLink href="/signup">Signup</NextLink> */}
     </Main>
   );
 };
 
-export default Index;
+export const getServerSideProps = withAuthUserTokenSSR({
+  // whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+})();
+
+export default withAuthUser()(Index);
