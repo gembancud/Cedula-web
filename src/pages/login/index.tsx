@@ -18,14 +18,12 @@ const Index = () => {
         />
       }
     >
-      Login
       <FirebaseAuthButton />
     </Main>
   );
 };
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
-  appPageURL: "/about",
 })();
 
 export default withAuthUser({

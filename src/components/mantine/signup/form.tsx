@@ -75,7 +75,7 @@ const Form = () => {
     const authToken = await AuthUser.getIdToken();
 
     try {
-      const verifyresponse = await fetch("http://localhost:4000/user/verify", {
+      const verifyresponse = await fetch("http://localhost:4000/register/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ const Form = () => {
       if (verifyresponse.ok) {
         const cloudinaryresponse = await upload(files, data.cloudinary);
         const uploadresponse = await fetch(
-          "http://localhost:4000/user/upload",
+          "http://localhost:4000/register/upload",
           {
             method: "POST",
             headers: {
