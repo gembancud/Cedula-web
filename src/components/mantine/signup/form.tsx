@@ -55,6 +55,7 @@ const Form = () => {
     initialValues: {
       name: "",
       email: "",
+      link: "",
       termsOfService: false,
     },
     validate: zodResolver(schema),
@@ -73,25 +74,20 @@ const Form = () => {
   const submitForm = async () => {
     const authToken = await AuthUser.getIdToken();
 
-    const formData = new FormData();
-    formData.append("name", form.values.name);
-    formData.append("email", form.values.email);
-    formData.append("captchaToken", captchaToken);
-    formData.append("authToken", authToken!);
-    // console.log("files", files);
-    // files.forEach((file) => formData.append("files[]", file));
     try {
       const verifyresponse = await fetch("http://localhost:4000/user/verify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
+          Authorization: authToken || "unauthenticated",
+          // cookie: ,
         },
         body: JSON.stringify({
           name: form.values.name,
           email: form.values.email,
+          link: form.values.link,
           captchaToken,
-          authToken,
         }),
       });
 
@@ -105,6 +101,7 @@ const Form = () => {
             headers: {
               "Content-Type": "application/json",
               Accept: "application/json",
+              Authorization: authToken || "unauthenticated",
             },
             body: JSON.stringify({
               email: form.values.email,
@@ -117,15 +114,15 @@ const Form = () => {
 
         const uploaddata = await uploadresponse.json();
         console.log("uploaddata", uploaddata);
+        // should reload page
+        // window.location.reload();
       } else {
-        console.log("response error", data);
+        throw new Error(data.message);
       }
+      nextStep();
     } catch (error) {
       console.log(error);
     }
-
-    // If successsful to this
-    nextStep();
   };
 
   const openModal = () =>
@@ -202,6 +199,13 @@ const Form = () => {
                 label="Email"
                 placeholder="your@email.com"
                 {...form.getInputProps("email")}
+              />
+
+              <TextInput
+                withAsterisk
+                label="Profile Link"
+                placeholder="https://www.facebook.com/yourprofile"
+                {...form.getInputProps("link")}
               />
 
               <Checkbox
