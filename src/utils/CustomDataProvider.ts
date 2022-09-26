@@ -1,7 +1,7 @@
 import { stringify } from "query-string";
 import { fetchUtils } from "react-admin";
 
-const apiUrl = "http://localhost:4000";
+const apiUrl = process.env.NEXT_PUBLIC_BACKEND_API_URL;
 
 export const GetCustomDataProvider = (authToken: string) => {
   const httpClient = (url: any, options: any) => {
