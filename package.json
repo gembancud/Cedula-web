@@ -41,6 +41,7 @@
     "next-firebase-auth": "^1.0.0-canary.17",
     "next-seo": "^5.5.0",
     "prop-types": "^15.8.1",
+    "query-string": "^7.1.1",
     "ra-data-json-server": "^4.3.3",
     "ra-data-simple-rest": "^4.3.3",
     "react": "^18.2.0",

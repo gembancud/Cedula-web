@@ -32,6 +32,7 @@ const schema = z.object({
   termsOfService: z.boolean().refine((value) => value, {
     message: "You must agree to the terms of service",
   }),
+  link: z.string().url({ message: "Invalid URL" }),
 });
 
 const Form = () => {
@@ -51,7 +52,7 @@ const Form = () => {
   };
 
   const form = useForm({
-    validateInputOnChange: ["name", "email"],
+    validateInputOnChange: ["name", "email", "link"],
     initialValues: {
       name: "",
       email: "",
