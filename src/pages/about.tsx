@@ -40,6 +40,7 @@ const About = () => (
       data privacy is of utmost importance, all source code and logical
       processes for the system are open to the public.
     </p>
+    <p>4. Accountability -</p>
   </Main>
 );
 
