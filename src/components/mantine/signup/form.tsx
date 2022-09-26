@@ -26,6 +26,7 @@ import { upload } from "@/utils/cloudinary";
 import DropZone from "./dropzone";
 import FileBadge from "./filebadge";
 
+const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
 const schema = z.object({
   name: z.string().min(2, { message: "Name should have at least 2 letters" }),
   email: z.string().email({ message: "Invalid email" }),
@@ -76,7 +77,7 @@ const Form = () => {
     const authToken = await AuthUser.getIdToken();
 
     try {
-      const verifyresponse = await fetch("http://localhost:4000/register/", {
+      const verifyresponse = await fetch(`${url}/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,23 +96,20 @@ const Form = () => {
       const data = await verifyresponse.json();
       if (verifyresponse.ok) {
         const cloudinaryresponse = await upload(files, data.cloudinary);
-        const uploadresponse = await fetch(
-          "http://localhost:4000/register/upload",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: authToken || "unauthenticated",
-            },
-            body: JSON.stringify({
-              email: form.values.email,
-              documents: Array.from(
-                cloudinaryresponse.map((res: any) => res.secure_url)
-              ),
-            }),
-          }
-        );
+        const uploadresponse = await fetch(`${url}/register/upload`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: authToken || "unauthenticated",
+          },
+          body: JSON.stringify({
+            email: form.values.email,
+            documents: Array.from(
+              cloudinaryresponse.map((res: any) => res.secure_url)
+            ),
+          }),
+        });
 
         const uploaddata = await uploadresponse.json();
         console.log("uploaddata", uploaddata);
