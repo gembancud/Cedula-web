@@ -12,6 +12,7 @@ import { VerifyEdit, VerifyList } from "./verify";
 const App = () => {
   const AuthUser = useAuthUser();
   const router = useRouter();
+  const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
 
   const [dataProvider, setDataProvider] = useState<any>();
   const [loaded, setLoaded] = useState(false);
@@ -20,16 +21,14 @@ const App = () => {
       try {
         const tmpAuthToken = await AuthUser.getIdToken();
         if (tmpAuthToken) {
-          const verifyresponse = await fetch(
-            "http://localhost:4000/evaluator",
-            {
-              method: "GET",
-              headers: {
-                Accept: "application/json",
-                Authorization: tmpAuthToken || "unauthenticated",
-              },
-            }
-          );
+          const verifyresponse = await fetch(`${url}/evaluator`, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              Authorization: tmpAuthToken || "unauthenticated",
+            },
+          });
+          console.log("verifyresponse", verifyresponse);
           if (verifyresponse.status === 200) {
             setLoaded(true);
             setDataProvider(GetCustomDataProvider(tmpAuthToken));
