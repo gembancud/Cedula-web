@@ -1,3 +1,10 @@
+/**
+ *
+ * This special login page is used to redirect
+ * the use to signup page after login
+ *
+ * */
+
 import {
   AuthAction,
   withAuthUser,
@@ -25,12 +32,13 @@ const Index = () => {
 
 export const getServerSideProps = withAuthUserTokenSSR({
   whenAuthed: AuthAction.REDIRECT_TO_APP,
+  appPageURL: "/signup",
 })();
 
 export default withAuthUser({
-  // whenAuthed: AuthAction.REDIRECT_TO_APP,
-  // appPageURL: "/signup/",
-  // whenUnauthedBeforeInit: AuthAction.RETURN_NULL,
-  // whenUnauthedAfterInit: AuthAction.RENDER,
+  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  LoaderComponent: () => <div>Loading...</div>,
+  whenUnauthedAfterInit: AuthAction.RENDER,
   whenAuthed: AuthAction.REDIRECT_TO_APP,
+  appPageURL: "/signup/",
 })(Index);

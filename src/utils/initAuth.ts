@@ -15,6 +15,19 @@ const initAuth = () => {
     onLogoutRequestError: (err) => {
       console.error(err);
     },
+    firebaseAdminInitConfig: {
+      credential: {
+        projectId: process.env.FIREBASE_PROJECT_ID!,
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+
+        // The private key must not be accessible on the client side.
+        privateKey: process.env.FIREBASE_PRIVATE_KEY
+          ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
+          : undefined,
+      },
+      databaseURL: process.env.FIREBASE_DATABASE_URL!,
+    },
+    // useFirebaseAdminDefaultCredential: true,
     firebaseClientInitConfig,
     cookies: {
       name: "Cedula-Web", // required
@@ -29,7 +42,7 @@ const initAuth = () => {
       overwrite: true,
       path: "/",
       sameSite: "lax",
-      secure: false, // set this to false in local (non-HTTPS) development
+      secure: process.env.COOKIE_SECURE === "true", // set this to false in local (non-HTTPS) development
       signed: true,
     },
     onVerifyTokenError: (err) => {
