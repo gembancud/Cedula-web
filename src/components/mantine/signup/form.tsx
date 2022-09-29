@@ -83,7 +83,6 @@ const Form = () => {
           "Content-Type": "application/json",
           Accept: "application/json",
           Authorization: authToken || "unauthenticated",
-          // cookie: ,
         },
         body: JSON.stringify({
           name: form.values.name,

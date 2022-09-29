@@ -134,11 +134,11 @@ export default function HeaderAction({ links }: HeaderActionProps) {
         </Group>
         <Button
           component={NextLink}
-          href="/signup"
+          href="/login"
           radius="xl"
           sx={{ height: 30 }}
         >
-          Join Cedula
+          Login to Cedula
         </Button>
       </Container>
     </Header>
