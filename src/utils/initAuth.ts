@@ -52,9 +52,11 @@ const initAuth = () => {
     },
     onVerifyTokenError: (err) => {
       console.error(err);
+      console.log("Verify token error", err);
     },
     onTokenRefreshError: (err) => {
       console.error(err);
+      console.log("onTokenRefreshError", err);
     },
   });
 };
