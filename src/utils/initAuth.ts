@@ -17,7 +17,7 @@ const initAuth = () => {
     },
     firebaseAdminInitConfig: {
       credential: {
-        projectId: process.env.FIREBASE_PROJECT_ID!,
+        projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID!,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
 
         // The private key must not be accessible on the client side.
@@ -25,7 +25,7 @@ const initAuth = () => {
           ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
           : undefined,
       },
-      databaseURL: process.env.FIREBASE_DATABASE_URL!,
+      databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DATABASE_URL!,
     },
     firebaseClientInitConfig,
     cookies: {
@@ -41,7 +41,7 @@ const initAuth = () => {
       overwrite: true,
       path: "/",
       sameSite: "lax",
-      secure: process.env.COOKIE_SECURE === "true", // set this to false in local (non-HTTPS) development
+      secure: process.env.NEXT_PUBLIC_COOKIE_SECURE === "true", // set this to false in local (non-HTTPS) development
       signed: true,
     },
     onVerifyTokenError: (err) => {
