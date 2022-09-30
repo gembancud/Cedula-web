@@ -22,8 +22,9 @@ const initAuth = () => {
 
         // The private key must not be accessible on the client side.
         privateKey: process.env.FIREBASE_PRIVATE_KEY
-          ? JSON.parse(process.env.FIREBASE_PRIVATE_KEY)
-          : undefined,
+          ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
+          : "",
+
       },
       databaseURL: process.env.FIREBASE_DATABASE_URL!,
     },

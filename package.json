@@ -1,6 +1,6 @@
 {
-  "name": "next-js-boilerplate",
-  "version": "2.1.1",
+  "name": "cedula-web",
+  "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
