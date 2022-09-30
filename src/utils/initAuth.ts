@@ -24,6 +24,7 @@ const initAuth = () => {
         privateKey: process.env.FIREBASE_PRIVATE_KEY
           ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/gm, "\n")
           : "",
+
       },
       databaseURL: process.env.FIREBASE_DATABASE_URL!,
     },
