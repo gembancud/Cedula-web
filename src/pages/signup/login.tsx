@@ -8,7 +8,7 @@
 import {
   AuthAction,
   withAuthUser,
-  withAuthUserTokenSSR,
+  // withAuthUserTokenSSR,
 } from "next-firebase-auth";
 
 import FirebaseAuthButton from "@/components/firebase/FirebaseAuth";
@@ -30,15 +30,15 @@ const Index = () => {
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenAuthed: AuthAction.REDIRECT_TO_APP,
-  appPageURL: "/signup",
-})();
+// export const getServerSideProps = withAuthUserTokenSSR({
+//   whenAuthed: AuthAction.REDIRECT_TO_APP,
+//   appPageURL: "/signup",
+// })();
 
 export default withAuthUser({
   whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
   LoaderComponent: () => <div>Loading...</div>,
   whenUnauthedAfterInit: AuthAction.RENDER,
   whenAuthed: AuthAction.REDIRECT_TO_APP,
-  appPageURL: "/signup/",
+  appPageURL: "/signup",
 })(Index);

@@ -1,7 +1,7 @@
 import {
   AuthAction,
   withAuthUser,
-  withAuthUserTokenSSR,
+  // withAuthUserTokenSSR,
 } from "next-firebase-auth";
 
 import FirebaseAuthButton from "@/components/firebase/FirebaseAuth";
@@ -23,9 +23,9 @@ const Index = () => {
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenAuthed: AuthAction.REDIRECT_TO_APP,
-})();
+// export const getServerSideProps = withAuthUserTokenSSR({
+//   whenAuthed: AuthAction.REDIRECT_TO_APP,
+// })();
 
 export default withAuthUser({
   // whenAuthed: AuthAction.REDIRECT_TO_APP,
