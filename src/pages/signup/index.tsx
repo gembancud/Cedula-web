@@ -1,4 +1,8 @@
-import { AuthAction, withAuthUser, withAuthUserSSR } from "next-firebase-auth";
+import {
+  AuthAction,
+  withAuthUser,
+  withAuthUserTokenSSR,
+} from "next-firebase-auth";
 
 import Form from "@/components/mantine/signup/form";
 import { Meta } from "@/layouts/Meta";
@@ -22,9 +26,9 @@ const Index = ({ signup }: any) => {
     </Main>
   );
 };
-export const getServerSideProps = withAuthUserSSR({
-  // whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-  // authPageURL: "/signup/login/",
+export const getServerSideProps = withAuthUserTokenSSR({
+  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: "/signup/login/",
   whenAuthed: AuthAction.RENDER,
 })(async ({ AuthUser }) => {
   let signup = null;
