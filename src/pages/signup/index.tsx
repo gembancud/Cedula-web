@@ -23,8 +23,8 @@ const Index = ({ signup }: any) => {
   );
 };
 export const getServerSideProps = withAuthUserSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-  authPageURL: "/signup/login/",
+  // whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+  // authPageURL: "/signup/login/",
   whenAuthed: AuthAction.RENDER,
 })(async ({ AuthUser }) => {
   let signup = null;
@@ -51,4 +51,10 @@ export const getServerSideProps = withAuthUserSSR({
   };
 });
 
-export default withAuthUser()(Index);
+export default withAuthUser({
+  whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
+  LoaderComponent: () => <div>Loading...</div>,
+  whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
+  authPageURL: "/signup/login/",
+  whenAuthed: AuthAction.RENDER,
+})(Index);
