@@ -1,4 +1,7 @@
-import { withAuthUser, withAuthUserTokenSSR } from "next-firebase-auth";
+import {
+  withAuthUser,
+  // withAuthUserTokenSSR
+} from "next-firebase-auth";
 
 import Contact from "@/components/mantine/landing/contact";
 import Faq from "@/components/mantine/landing/faq";
@@ -26,8 +29,8 @@ const Index = () => {
   );
 };
 
-export const getServerSideProps = withAuthUserTokenSSR({
-  // whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})();
+// export const getServerSideProps = withAuthUserTokenSSR({
+// whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
+// })();
 
 export default withAuthUser()(Index);
