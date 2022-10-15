@@ -9,10 +9,11 @@ import { Meta } from "@/layouts/Meta";
 import { Main } from "@/templates/Main";
 
 export interface SignupProps {
-  signup: object | null;
+  signup: object[] | null;
 }
 
-const Index = ({ signup }: any) => {
+const Index = ({ signup }: SignupProps) => {
+  console.log("signup", signup);
   return (
     <Main
       meta={
@@ -22,7 +23,11 @@ const Index = ({ signup }: any) => {
         />
       }
     >
-      {signup === null ? <Form /> : <div> {JSON.stringify(signup)}</div>}
+      {signup === null || signup.length === 0 ? (
+        <Form />
+      ) : (
+        <div> {JSON.stringify(signup)}</div>
+      )}
     </Main>
   );
 };
@@ -55,7 +60,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   };
 });
 
-export default withAuthUser({
+export default withAuthUser<SignupProps>({
   whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
   LoaderComponent: () => <div>Loading...</div>,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,

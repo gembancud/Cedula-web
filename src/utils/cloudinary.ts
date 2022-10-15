@@ -1,4 +1,4 @@
-export const upload = async (files: string[], cloudinary: any) => {
+export const upload = async (files: string[], org: string, cloudinary: any) => {
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const { url, api_key, timestamp, signature } = cloudinary;
 
@@ -12,6 +12,7 @@ export const upload = async (files: string[], cloudinary: any) => {
     formData.append("timestamp", timestamp);
     formData.append("signature", signature);
     formData.append("upload_preset", "cedula");
+    formData.append("folder", org);
 
     try {
       const res = fetch(url, {

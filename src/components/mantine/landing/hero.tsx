@@ -85,13 +85,13 @@ export default function HeroTitle() {
             gradient={{ from: "blue", to: "cyan" }}
             inherit
           >
-            Facebook
+            Facebook and Twitter
           </Text>{" "}
         </h1>
 
         <Text className={classes.description} color="dimmed">
           Sign up to be a part of the Cedula community and be verified as
-          Filipino on Facebook.
+          Filipino on your favorite social media platforms.
         </Text>
 
         <Group className={classes.controls}>

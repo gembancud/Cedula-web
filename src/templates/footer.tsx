@@ -1,11 +1,12 @@
 import type { MantineTheme } from "@mantine/core";
 import { ActionIcon, Container, createStyles, Group } from "@mantine/core";
-import { MantineLogo } from "@mantine/ds";
 import {
   IconBrandInstagram,
   IconBrandTwitter,
   IconBrandYoutube,
 } from "@tabler/icons";
+// import { MantineLogo } from "@mantine/ds";
+import Image from "next/image";
 
 import DarkToggle from "@/components/mantine/darktoggle";
 import { AppConfig } from "@/utils/AppConfig";
@@ -49,7 +50,14 @@ export default function FooterSocial() {
   return (
     <div className={classes.footer}>
       <Container className={classes.inner}>
-        <MantineLogo size={28} />
+        {/* <MantineLogo size={28} /> */}
+
+        <Image
+          src="/assets/images/cedula128.png"
+          alt="Cedula Image"
+          width={128}
+          height={128}
+        />
         <Group spacing={0} className={classes.links} position="right" noWrap>
           <DarkToggle />
           <ActionIcon size="lg">

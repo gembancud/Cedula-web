@@ -7,7 +7,7 @@ import { Admin, Resource } from "react-admin";
 
 import { GetCustomDataProvider } from "@/utils/CustomDataProvider";
 
-import { VerifyEdit, VerifyList } from "./verify";
+import { VerifyEdit, VerifyList, VerifyShow } from "./verify";
 
 const App = () => {
   const AuthUser = useAuthUser();
@@ -46,7 +46,13 @@ const App = () => {
 
   return (
     <Admin dataProvider={dataProvider}>
-      <Resource name="verify" list={VerifyList} edit={VerifyEdit} />
+      <Resource
+        name="verify"
+        list={VerifyList}
+        // list={ListGuesser}
+        edit={VerifyEdit}
+        show={VerifyShow}
+      />
     </Admin>
   );
 };

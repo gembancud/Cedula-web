@@ -8,10 +8,11 @@ import {
   Header,
   Menu,
 } from "@mantine/core";
-import { MantineLogo } from "@mantine/ds";
 import { useDisclosure } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
 import { IconChevronDown } from "@tabler/icons";
+// import { MantineLogo } from "@mantine/ds";
+import Image from "next/image";
 import { useRouter } from "next/router";
 
 const HEADER_HEIGHT = 60;
@@ -127,7 +128,12 @@ export default function HeaderAction({ links }: HeaderActionProps) {
             className={classes.burger}
             size="sm"
           />
-          <MantineLogo size={28} />
+          <Image
+            src="/assets/images/cedula128.png"
+            alt="Cedula Image"
+            width={128}
+            height={128}
+          />
         </Group>
         <Group spacing={5} className={classes.links}>
           {items}

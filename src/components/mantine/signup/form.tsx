@@ -30,10 +30,11 @@ const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
 const schema = z.object({
   name: z.string().min(2, { message: "Name should have at least 2 letters" }),
   email: z.string().email({ message: "Invalid email" }),
+  contact_number: z.string().min(10, { message: "Invalid contact number" }),
   termsOfService: z.boolean().refine((value) => value, {
     message: "You must agree to the terms of service",
   }),
-  link: z.string().url({ message: "Invalid URL" }),
+  fblink: z.string().url({ message: "Invalid URL" }),
 });
 
 const Form = () => {
@@ -53,18 +54,21 @@ const Form = () => {
   };
 
   const form = useForm({
-    validateInputOnChange: ["name", "email", "link"],
+    validateInputOnChange: ["name", "email", "contact_number", "fblink"],
     initialValues: {
       name: "",
       email: "",
-      link: "",
+      contact_number: "",
+      fblink: "",
       termsOfService: false,
+      twitterlink: "",
     },
     validate: zodResolver(schema),
   });
   const nextStep = () =>
     setActive((current) => {
       if (form.validate().hasErrors) {
+        console.log("error", form.validate().errors);
         return current;
       }
       return current < 3 ? current + 1 : current;
@@ -87,14 +91,23 @@ const Form = () => {
         body: JSON.stringify({
           name: form.values.name,
           email: form.values.email,
-          link: form.values.link,
+          contact_number: form.values.contact_number,
+          org: "Philippines",
+          links: [
+            { link: form.values.fblink, site: "fb" },
+            { link: form.values.twitterlink, site: "twitter" },
+          ],
           captchaToken,
         }),
       });
 
       const data = await verifyresponse.json();
-      if (verifyresponse.ok) {
-        const cloudinaryresponse = await upload(files, data.cloudinary);
+      if (verifyresponse.ok && files.length > 0) {
+        const cloudinaryresponse = await upload(
+          files,
+          "Philippines",
+          data.cloudinary
+        );
         const uploadresponse = await fetch(`${url}/register/upload`, {
           method: "POST",
           headers: {
@@ -104,6 +117,7 @@ const Form = () => {
           },
           body: JSON.stringify({
             email: form.values.email,
+            org: "Philippines",
             documents: Array.from(
               cloudinaryresponse.map((res: any) => res.secure_url)
             ),
@@ -201,9 +215,23 @@ const Form = () => {
 
               <TextInput
                 withAsterisk
-                label="Profile Link"
+                label="Contact Number"
+                placeholder="09123456789"
+                {...form.getInputProps("contact_number")}
+              />
+
+              <TextInput
+                withAsterisk
+                label="Facebook Profile Link"
                 placeholder="https://www.facebook.com/yourprofile"
-                {...form.getInputProps("link")}
+                {...form.getInputProps("fblink")}
+              />
+
+              <TextInput
+                // withAsterisk
+                label="Twitter Profile Link"
+                placeholder="https://twitter.com/yourprofile"
+                {...form.getInputProps("twitterlink")}
               />
 
               <Checkbox
