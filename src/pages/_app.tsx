@@ -3,6 +3,7 @@ import "../styles/global.css";
 import type { ColorScheme } from "@mantine/core";
 import { ColorSchemeProvider, MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
+import { NotificationsProvider } from "@mantine/notifications";
 import type { AppProps } from "next/app";
 import { useState } from "react";
 
@@ -30,9 +31,11 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           colorScheme,
         }}
       >
-        <ModalsProvider>
-          <Component {...pageProps} />
-        </ModalsProvider>
+        <NotificationsProvider>
+          <ModalsProvider>
+            <Component {...pageProps} />
+          </ModalsProvider>
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
