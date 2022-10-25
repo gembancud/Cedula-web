@@ -21,12 +21,12 @@ import { useAuthUser } from "next-firebase-auth";
 import { useRef, useState } from "react";
 import { z } from "zod";
 
+import { url } from "@/services";
 import { upload } from "@/utils/cloudinary";
 
 import DropZone from "./dropzone";
 import FileBadge from "./filebadge";
 
-const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
 const schema = z.object({
   name: z.string().min(2, { message: "Name should have at least 2 letters" }),
   email: z.string().email({ message: "Invalid email" }),
