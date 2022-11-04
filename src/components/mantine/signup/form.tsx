@@ -62,6 +62,7 @@ const Form = () => {
       fblink: "",
       termsOfService: false,
       twitterlink: "",
+      redditlink: "",
     },
     validate: zodResolver(schema),
   });
@@ -96,6 +97,7 @@ const Form = () => {
           links: [
             { link: form.values.fblink, site: "fb" },
             { link: form.values.twitterlink, site: "twitter" },
+            { link: form.values.redditlink, site: "reddit" },
           ],
           captchaToken,
         }),
@@ -232,6 +234,13 @@ const Form = () => {
                 label="Twitter Profile Link"
                 placeholder="https://twitter.com/yourprofile"
                 {...form.getInputProps("twitterlink")}
+              />
+
+              <TextInput
+                // withAsterisk
+                label="Reddit Profile Link"
+                placeholder="https://www.reddit.com/user/yourprofile"
+                {...form.getInputProps("redditlink")}
               />
 
               <Checkbox
