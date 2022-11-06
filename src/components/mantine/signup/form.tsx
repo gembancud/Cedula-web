@@ -21,8 +21,7 @@ import { useAuthUser } from "next-firebase-auth";
 import { useRef, useState } from "react";
 import { z } from "zod";
 
-import { url } from "@/services";
-import { upload } from "@/utils/cloudinary";
+import { Signup } from "@/services";
 
 import DropZone from "./dropzone";
 import FileBadge from "./filebadge";
@@ -79,61 +78,25 @@ const Form = () => {
     setActive((current) => (current > 0 ? current - 1 : current));
 
   const submitForm = async () => {
-    const authToken = await AuthUser.getIdToken();
-
     try {
-      const verifyresponse = await fetch(`${url}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: authToken || "unauthenticated",
-        },
-        body: JSON.stringify({
-          name: form.values.name,
-          email: form.values.email,
-          contact_number: form.values.contact_number,
-          org: "Philippines",
-          links: [
-            { link: form.values.fblink, site: "fb" },
-            { link: form.values.twitterlink, site: "twitter" },
-            { link: form.values.redditlink, site: "reddit" },
-          ],
-          captchaToken,
-        }),
+      const authToken = await AuthUser.getIdToken();
+      if (authToken === null) throw new Error("No auth token");
+
+      const SignupResponse = await Signup({
+        authToken,
+        name: form.values.name,
+        email: form.values.email,
+        contact_number: form.values.contact_number,
+        org: "Philippines",
+        fblink: form.values.fblink,
+        twitterlink: form.values.twitterlink,
+        redditlink: form.values.redditlink,
+        captchaToken,
+        files,
       });
-
-      const data = await verifyresponse.json();
-      if (verifyresponse.ok && files.length > 0) {
-        const cloudinaryresponse = await upload(
-          files,
-          "Philippines",
-          data.cloudinary
-        );
-        const uploadresponse = await fetch(`${url}/register/upload`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: authToken || "unauthenticated",
-          },
-          body: JSON.stringify({
-            email: form.values.email,
-            org: "Philippines",
-            documents: Array.from(
-              cloudinaryresponse.map((res: any) => res.secure_url)
-            ),
-          }),
-        });
-
-        const uploaddata = await uploadresponse.json();
-        console.log("uploaddata", uploaddata);
-        // should reload page
-        // window.location.reload();
-      } else {
-        throw new Error(data.message);
+      if (SignupResponse.status === 200) {
+        nextStep();
       }
-      nextStep();
     } catch (error) {
       console.log(error);
     }

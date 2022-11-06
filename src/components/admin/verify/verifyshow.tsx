@@ -55,7 +55,7 @@ export const VerifyShow = () => {
     }
     const verifyResponse = await VerifyUser({
       token: userToken,
-      email: data.applicant_email,
+      email: data.email,
       org: "Philippines",
       evaluation: evaluationValue!,
       comment: evaluationComment,
@@ -64,7 +64,7 @@ export const VerifyShow = () => {
 
     showNotification({
       title: "Accepted",
-      message: `User ${data.applicant_name} has been accepted`,
+      message: `User ${data.name} has been accepted`,
       color: "green",
       icon: <CheckIcon />,
     });
@@ -85,13 +85,13 @@ export const VerifyShow = () => {
           <Tabs.Tab value="raw">Raw</Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Panel value="inspect">{data.applicant_name}</Tabs.Panel>
+        <Tabs.Panel value="inspect">{data.name}</Tabs.Panel>
         <Tabs.Panel value="raw">
           <Show>
             <SimpleShowLayout>
-              <TextField source="applicant_name" />
-              <TextField source="applicant_email" />
-              <TextField source="applicant_links" />
+              <TextField source="name" />
+              <TextField source="email" />
+              <TextField source="links" />
               <TextField source="org" />
               <DateField source="createdAt" />
               <DateField source="updatedAt" />

@@ -15,9 +15,9 @@ const verifyFilters = [
 export const VerifyList = () => (
   <List filters={verifyFilters}>
     <Datagrid rowClick="show">
-      <TextField source="applicant_name" />
-      <TextField source="applicant_email" />
-      <TextField source="applicant_links" />
+      <TextField source="name" />
+      <TextField source="email" />
+      <TextField source="links" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />
       <TextField source="documents" />

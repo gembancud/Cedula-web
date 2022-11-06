@@ -1,4 +1,4 @@
-const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
+import { url } from "@/utils/constants";
 
 interface VerifyUserInterface {
   token: string;
