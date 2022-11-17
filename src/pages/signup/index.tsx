@@ -6,6 +6,7 @@ import {
 
 import Form from "@/components/mantine/signup/form";
 import { Meta } from "@/layouts/Meta";
+import { GetUserMe } from "@/services";
 import { Main } from "@/templates/Main";
 
 export interface SignupProps {
@@ -36,26 +37,24 @@ export const getServerSideProps = withAuthUserTokenSSR({
   authPageURL: "/signup/login/",
   whenAuthed: AuthAction.RENDER,
 })(async ({ AuthUser }) => {
-  let signup = null;
-  const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
   try {
-    const AuthToken = await AuthUser.getIdToken();
-    const verifyresponse = await fetch(`${url}/register`, {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        Authorization: AuthToken || "unauthenticated",
-      },
-    });
-    if (verifyresponse.status === 200) {
-      signup = await verifyresponse.json();
+    const token = await AuthUser.getIdToken();
+    if (!token) throw new Error("No token");
+
+    const signup = await GetUserMe({ token });
+    if (signup) {
+      return {
+        props: {
+          signup,
+        },
+      };
     }
   } catch (error) {
     console.log(error);
   }
   return {
     props: {
-      signup,
+      signup: null,
     },
   };
 });

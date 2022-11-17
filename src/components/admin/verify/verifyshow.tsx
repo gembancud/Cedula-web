@@ -71,8 +71,11 @@ export const VerifyShow = () => {
   };
 
   const reject = () => {
+    // TODO: add reject functionality
     console.log("reject");
   };
+
+  console.log("data", data);
 
   if (isLoading) {
     return <div>Loading...</div>;

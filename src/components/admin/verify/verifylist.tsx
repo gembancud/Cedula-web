@@ -17,6 +17,7 @@ export const VerifyList = () => (
     <Datagrid rowClick="show">
       <TextField source="name" />
       <TextField source="email" />
+      <TextField source="org" />
       <TextField source="links" />
       <DateField source="createdAt" />
       <DateField source="updatedAt" />

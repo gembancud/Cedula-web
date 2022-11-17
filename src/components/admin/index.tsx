@@ -5,6 +5,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { Admin, Resource } from "react-admin";
 
+import { GetEvaluator } from "@/services";
 import { GetCustomDataProvider } from "@/utils/CustomDataProvider";
 
 import { VerifyEdit, VerifyList, VerifyShow } from "./verify";
@@ -12,26 +13,18 @@ import { VerifyEdit, VerifyList, VerifyShow } from "./verify";
 const App = () => {
   const AuthUser = useAuthUser();
   const router = useRouter();
-  const url = process.env.NEXT_PUBLIC_BACKEND_API_URL!;
 
   const [dataProvider, setDataProvider] = useState<any>();
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     async function fetchData() {
       try {
-        const tmpAuthToken = await AuthUser.getIdToken();
-        if (tmpAuthToken) {
-          const verifyresponse = await fetch(`${url}/evaluator`, {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              Authorization: tmpAuthToken || "unauthenticated",
-            },
-          });
-          console.log("verifyresponse", verifyresponse);
+        const token = await AuthUser.getIdToken();
+        if (token) {
+          const verifyresponse = await GetEvaluator({ token });
           if (verifyresponse.status === 200) {
             setLoaded(true);
-            setDataProvider(GetCustomDataProvider(tmpAuthToken));
+            setDataProvider(GetCustomDataProvider(token));
           } else throw new Error("Not authorized");
         }
       } catch (error) {
