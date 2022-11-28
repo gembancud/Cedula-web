@@ -10,10 +10,14 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { NextLink } from "@mantine/next";
-import { IconChevronDown } from "@tabler/icons";
+import { IconChevronDown, IconLogout, IconSettings } from "@tabler/icons";
 // import { MantineLogo } from "@mantine/ds";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useAuthUser } from "next-firebase-auth";
+import { useEffect, useState } from "react";
+
+import { GetUserMe } from "@/services";
 
 const HEADER_HEIGHT = 60;
 
@@ -75,6 +79,27 @@ export default function HeaderAction({ links }: HeaderActionProps) {
   const { classes } = useStyles();
   const router = useRouter();
   const [opened, { toggle }] = useDisclosure(false);
+
+  const AuthUser = useAuthUser();
+  const [loaded, setLoaded] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const token = await AuthUser.getIdToken();
+        if (!token) throw new Error("Token invalid");
+        const response = await GetUserMe({ token: token! });
+        setUser(response);
+        setLoaded(true);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (!loaded) fetchData();
+  });
+
   const items = links.map((link) => {
     const menuItems = link.links?.map((item) => (
       <Menu.Item key={item.link}>{item.label}</Menu.Item>
@@ -118,6 +143,39 @@ export default function HeaderAction({ links }: HeaderActionProps) {
     );
   });
 
+  const SettingsClick = (event: any) => {
+    event.preventDefault();
+    router.replace("about");
+  };
+
+  const LogoutClick = async () => {
+    await AuthUser.signOut();
+    router.reload();
+  };
+
+  const menu = () => {
+    return (
+      <Menu shadow="md" width={200}>
+        <Menu.Target>
+          <Button>My Account</Button>
+        </Menu.Target>
+
+        <Menu.Dropdown>
+          <Menu.Item icon={<IconSettings size={14} />} onClick={SettingsClick}>
+            Settings
+          </Menu.Item>
+          <Menu.Item
+            color="red"
+            icon={<IconLogout size={14} />}
+            onClick={LogoutClick}
+          >
+            Sign out
+          </Menu.Item>
+        </Menu.Dropdown>
+      </Menu>
+    );
+  };
+
   return (
     <Header height={HEADER_HEIGHT} sx={{ borderBottom: 0 }} mb={120}>
       <Container className={classes.inner} fluid>
@@ -138,14 +196,19 @@ export default function HeaderAction({ links }: HeaderActionProps) {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-        <Button
-          component={NextLink}
-          href="/login"
-          radius="xl"
-          sx={{ height: 30 }}
-        >
-          Login to Cedula
-        </Button>
+
+        {user ? (
+          menu()
+        ) : (
+          <Button
+            component={NextLink}
+            href="/login"
+            radius="xl"
+            sx={{ height: 30 }}
+          >
+            Login to Cedula
+          </Button>
+        )}
       </Container>
     </Header>
   );

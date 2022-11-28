@@ -1,3 +1,5 @@
+import { withAuthUser } from "next-firebase-auth";
+
 import { Meta } from "@/layouts/Meta";
 import { Main } from "@/templates/Main";
 
@@ -44,4 +46,4 @@ const About = () => (
   </Main>
 );
 
-export default About;
+export default withAuthUser()(About);
