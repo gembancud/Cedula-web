@@ -145,7 +145,7 @@ export default function HeaderAction({ links }: HeaderActionProps) {
 
   const SettingsClick = (event: any) => {
     event.preventDefault();
-    router.replace("about");
+    router.replace("me");
   };
 
   const LogoutClick = async () => {
@@ -202,7 +202,7 @@ export default function HeaderAction({ links }: HeaderActionProps) {
         ) : (
           <Button
             component={NextLink}
-            href="/login"
+            href="login"
             radius="xl"
             sx={{ height: 30 }}
           >
