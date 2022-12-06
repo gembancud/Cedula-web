@@ -145,7 +145,7 @@ export default function HeaderAction({ links }: HeaderActionProps) {
 
   const SettingsClick = (event: any) => {
     event.preventDefault();
-    router.replace("me");
+    router.replace("user");
   };
 
   const LogoutClick = async () => {

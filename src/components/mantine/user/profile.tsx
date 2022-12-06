@@ -3,13 +3,10 @@ import {
   Box,
   Button,
   Center,
-  Divider,
   Group,
-  Paper,
   Stack,
   Text,
   TextInput,
-  Title,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { openConfirmModal } from "@mantine/modals";
@@ -44,11 +41,11 @@ export type MeType = {
   }[];
 };
 
-interface FormInterface {
+interface ProfileInterface {
   me: MeType | null;
 }
 
-const Form = ({ me }: FormInterface) => {
+const Profile = ({ me }: ProfileInterface) => {
   console.log("me", me);
   const AuthUser = useAuthUser();
   const [captchaToken, setCaptchaToken] = useState("");
@@ -86,6 +83,7 @@ const Form = ({ me }: FormInterface) => {
 
       let response;
       if (me) {
+        console.log("patching");
         response = await PatchUserMe({
           authToken,
           name: form.values.name,
@@ -133,93 +131,93 @@ const Form = ({ me }: FormInterface) => {
     });
 
   return (
-    <Paper shadow="md" radius="xl" p="xl" withBorder>
-      <Box sx={{ maxWidth: 1000 }} mx="auto">
-        <Title order={3} align="center" sx={{ paddingBottom: "2%" }}>
-          My Profile
-        </Title>
-        <Divider my="sm" />
-        <Stack
-          align="stretch"
-          spacing="md"
-          justify="center"
-          sx={() => ({
-            padding: "5% 20%",
-            // height: "50%",
-            // width: "100%",
-          })}
+    <Box sx={{ maxWidth: 1000 }} mx="auto">
+      <Stack
+        align="stretch"
+        spacing="md"
+        justify="center"
+        sx={() => ({
+          padding: "5% 20%",
+          // height: "50%",
+          // width: "100%",
+        })}
+      >
+        <TextInput
+          withAsterisk
+          label="Name (Full Name)"
+          placeholder="Juan Dela Cruz"
+          {...form.getInputProps("name")}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Email"
+          placeholder="your@email.com"
+          {...form.getInputProps("email")}
+          disabled={me}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Contact Number"
+          placeholder="09123456789"
+          {...form.getInputProps("contact_number")}
+        />
+
+        <TextInput
+          withAsterisk
+          label="Facebook Profile Link"
+          placeholder="https://www.facebook.com/yourprofile"
+          {...form.getInputProps("fblink")}
+        />
+
+        <TextInput
+          // withAsterisk
+          label="Twitter Profile Link"
+          placeholder="https://twitter.com/yourprofile"
+          {...form.getInputProps("twitterlink")}
+        />
+
+        <TextInput
+          // withAsterisk
+          label="Reddit Profile Link"
+          placeholder="https://www.reddit.com/user/yourprofile"
+          {...form.getInputProps("redditlink")}
+        />
+
+        <Center
+          sx={{
+            padding: "5% 5%",
+          }}
         >
-          <TextInput
-            withAsterisk
-            label="Name (Full Name)"
-            placeholder="Juan Dela Cruz"
-            {...form.getInputProps("name")}
+          <HCaptcha
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            onLoad={onLoad}
+            onVerify={setCaptchaToken}
+            ref={captchaRef}
           />
+        </Center>
+      </Stack>
 
-          <TextInput
-            withAsterisk
-            label="Email"
-            placeholder="your@email.com"
-            {...form.getInputProps("email")}
-          />
-
-          <TextInput
-            withAsterisk
-            label="Contact Number"
-            placeholder="09123456789"
-            {...form.getInputProps("contact_number")}
-          />
-
-          <TextInput
-            withAsterisk
-            label="Facebook Profile Link"
-            placeholder="https://www.facebook.com/yourprofile"
-            {...form.getInputProps("fblink")}
-          />
-
-          <TextInput
-            // withAsterisk
-            label="Twitter Profile Link"
-            placeholder="https://twitter.com/yourprofile"
-            {...form.getInputProps("twitterlink")}
-          />
-
-          <TextInput
-            // withAsterisk
-            label="Reddit Profile Link"
-            placeholder="https://www.reddit.com/user/yourprofile"
-            {...form.getInputProps("redditlink")}
-          />
-
-          <Center
-            sx={{
-              padding: "5% 5%",
-            }}
-          >
-            <HCaptcha
-              sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-              onLoad={onLoad}
-              onVerify={setCaptchaToken}
-              ref={captchaRef}
-            />
-          </Center>
-        </Stack>
-
-        <Group position="right" mt="xl">
-          <Button variant="default" onClick={() => {}}>
-            Cancel
-          </Button>
-          <Button
-            onClick={() => {
-              openModal();
-            }}
-          >
-            Save
-          </Button>
-        </Group>
-      </Box>
-    </Paper>
+      <Group position="right" mt="xl">
+        <Button
+          variant="default"
+          onClick={() => {
+            window.location.reload();
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
+            openModal();
+          }}
+        >
+          Save
+        </Button>
+      </Group>
+    </Box>
   );
 };
 
-export default Form;
+export default Profile;
