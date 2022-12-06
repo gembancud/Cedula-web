@@ -3,7 +3,6 @@ import {
   // withAuthUserTokenSSR
 } from "next-firebase-auth";
 
-import { Tag } from "@/components/cedula";
 import Contact from "@/components/mantine/landing/contact";
 import Faq from "@/components/mantine/landing/faq";
 import Hero from "@/components/mantine/landing/hero";
@@ -20,7 +19,6 @@ const Index = () => {
         />
       }
     >
-      <Tag />
       <Hero />
       <Faq />
       <Contact />

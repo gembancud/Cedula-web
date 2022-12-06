@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { useAuthUser } from "next-firebase-auth";
 import { useEffect, useState } from "react";
 
+import { Tag } from "@/components/cedula";
 import { GetUserMe } from "@/services";
 
 const HEADER_HEIGHT = 60;
@@ -196,7 +197,7 @@ export default function HeaderAction({ links }: HeaderActionProps) {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-
+        {user && <Tag />}
         {user ? (
           menu()
         ) : (
