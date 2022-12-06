@@ -35,9 +35,9 @@ export default function FaqSimple() {
         <Accordion.Item className={classes.item} value="how">
           <Accordion.Control>How does this work?</Accordion.Control>
           <Accordion.Panel>
-            You sign in with your Facebook account, and fill up the form. Once
-            you have been verified, your name will have a badge for others to
-            see.
+            You sign in with your Facebook account, and join an organization you
+            belong. Once you have been verified, your name will have a badge for
+            others to see.
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -47,23 +47,25 @@ export default function FaqSimple() {
           </Accordion.Control>
           <Accordion.Panel>
             Your legal identity can only be verified once. If you have multiple
-            accounts, you can only verify one of them. If your identity is being
-            used by someone else, please contact us.
+            accounts, you can only verify one of them. You can use this single
+            account to join organizations listed.
+            <br />
+            If your identity is being used by someone else, please contact us.
           </Accordion.Panel>
         </Accordion.Item>
 
         <Accordion.Item className={classes.item} value="Verification">
           <Accordion.Control>How does verification work?</Accordion.Control>
           <Accordion.Panel>
-            Verification is manually and carefully done by our legal team. We
-            will browse your submitted information and verify for authenticity.
+            Verification is done by our each organization. When signing up, each
+            organization will have its own requirements for you to fulfill.
             <br />
             <br />
             Specifically, when you sign up, your information will be sent to
-            three random checkers. Each checker will independently verify your
-            identity. You will be verified if all three checkers agree that your
+            random checkers. Each checker will independently verify your
+            identity. You will be verified if all checkers agree that your
             identity is authentic. If any checker disagrees, you will be asked
-            to provide more information.
+            to provide more information or your registration will be denied.
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -78,9 +80,11 @@ export default function FaqSimple() {
         </Accordion.Item>
 
         <Accordion.Item className={classes.item} value="Twitter">
-          <Accordion.Control>Is there cedula for twitter</Accordion.Control>
+          <Accordion.Control>
+            Is there cedula for twitter and reddit?
+          </Accordion.Control>
           <Accordion.Panel>
-            Cedula only works for Facebook on Chrome.
+            Cedula works for Facebook, Twitter, and Reddit on Chrome.
             <br />
             <br />
             We plan to add support for other social media platforms in the
