@@ -16,10 +16,9 @@ import type { MeType } from "./profile";
 
 interface OrgsInterface {
   me: MeType;
-  orgs: OrgType[];
 }
 
-export type OrgType = {
+export type BaseOrgType = {
   name: string;
   image: string;
   badge: string;
@@ -29,14 +28,22 @@ export type OrgType = {
   access: string;
 };
 
-const Orgs = ({ me, orgs }: OrgsInterface) => {
+export type MeOrgType = BaseOrgType & {
+  status: string;
+  active_badge: string;
+  badges: {
+    name: string;
+    link: string;
+  }[];
+};
+
+const Orgs = ({ me }: OrgsInterface) => {
   const theme = useMantineTheme();
   const [openManageDrawer, setOpenManageDrawer] = useState(false);
   const [openJoinDrawer, setOpenJoinDrawer] = useState(false);
-  const [allOrgs, setAllOrgs] = useState<OrgType[] | null>(null);
-  const [selectedOrg, setSelectedOrg] = useState<OrgType | null>(null);
+  const [allOrgs, setAllOrgs] = useState<BaseOrgType[] | null>(null);
+  const [selectedOrg, setSelectedOrg] = useState<MeOrgType | null>(null);
   console.log("me", me);
-  console.log("orgs", orgs);
   // const AuthUser = useAuthUser();
 
   const ManageDrawer = () => {
@@ -77,7 +84,7 @@ const Orgs = ({ me, orgs }: OrgsInterface) => {
         overlayBlur={3}
       >
         {allOrgs &&
-          allOrgs!.map((org: OrgType) => (
+          allOrgs!.map((org: BaseOrgType) => (
             <OrgCard
               key={org.name}
               image={org.image}
@@ -106,7 +113,7 @@ const Orgs = ({ me, orgs }: OrgsInterface) => {
       >
         <Title order={3}>My Organizations</Title>
         <Stack>
-          {orgs.map((org: OrgType) => (
+          {me.orgs.map((org: MeOrgType) => (
             <>
               <UnstyledButton
                 onClick={() => {

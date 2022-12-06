@@ -16,6 +16,8 @@ import { z } from "zod";
 
 import { PatchUserMe, PostUserMe } from "@/services";
 
+import type { MeOrgType } from "./orgs";
+
 const schema = z.object({
   name: z.string().min(2, { message: "Name should have at least 2 letters" }),
   email: z.string().email({ message: "Invalid email" }),
@@ -31,14 +33,7 @@ export type MeType = {
     link: string;
     site: string;
   }[];
-  orgs: {
-    org: string;
-    active_badge: string;
-    badges: {
-      name: string;
-      link: string;
-    }[];
-  }[];
+  orgs: MeOrgType[];
 };
 
 interface ProfileInterface {

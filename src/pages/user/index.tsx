@@ -7,20 +7,18 @@ import {
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
 
-import type { OrgType } from "@/components/mantine/user/orgs";
 import Orgs from "@/components/mantine/user/orgs";
 import type { MeType } from "@/components/mantine/user/profile";
 import Profile from "@/components/mantine/user/profile";
 import { Meta } from "@/layouts/Meta";
-import { GetOrgsMe, GetUserMe } from "@/services";
+import { GetUserMe } from "@/services";
 import { Main } from "@/templates/Main";
 
 export interface MeProps {
   me: MeType | null;
-  orgs: OrgType[] | null;
 }
 
-const Index = ({ me, orgs }: MeProps) => {
+const Index = ({ me }: MeProps) => {
   const router = useRouter();
   if (me === null) {
     router.push("/login");
@@ -43,7 +41,7 @@ const Index = ({ me, orgs }: MeProps) => {
           </Tabs.Panel>
 
           <Tabs.Panel value="organizations" pt="xs">
-            <Orgs me={me!} orgs={orgs!} />
+            <Orgs me={me!} />
           </Tabs.Panel>
         </Tabs>
       </Paper>
@@ -61,11 +59,9 @@ export const getServerSideProps = withAuthUserTokenSSR({
 
     const me = await GetUserMe({ token });
     if (me) {
-      const orgs = await GetOrgsMe({ token });
       return {
         props: {
           me,
-          orgs: orgs.orgs,
         },
       };
     }
@@ -75,7 +71,6 @@ export const getServerSideProps = withAuthUserTokenSSR({
   return {
     props: {
       me: null,
-      orgs: null,
     },
   };
 });
