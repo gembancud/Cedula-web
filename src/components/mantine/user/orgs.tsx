@@ -3,34 +3,15 @@ import { IconPlus } from "@tabler/icons";
 import { useState } from "react";
 
 import { GetOrgs } from "@/services";
+import type { BaseOrgType, MeOrgType, MeType } from "@/types";
 
 import { BrowseDrawer } from "./browsedrawer";
 import { ManageDrawer } from "./managedrawer";
 import { OrgCard } from "./OrgCard";
-import type { MeType } from "./profile";
 
 interface OrgsInterface {
   me: MeType;
 }
-
-export type BaseOrgType = {
-  name: string;
-  image: string;
-  badge: string;
-  description: string;
-  requirements: string;
-  createdAt: string;
-  access: string;
-};
-
-export type MeOrgType = BaseOrgType & {
-  status: string;
-  active_badge: string;
-  badges: {
-    name: string;
-    link: string;
-  }[];
-};
 
 const Orgs = ({ me }: OrgsInterface) => {
   const [openManageDrawer, setOpenManageDrawer] = useState(false);

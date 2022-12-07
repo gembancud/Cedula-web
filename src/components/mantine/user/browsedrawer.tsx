@@ -1,7 +1,8 @@
 import { Drawer, useMantineTheme } from "@mantine/core";
 
+import type { BaseOrgType } from "@/types";
+
 import { OrgCard } from "./OrgCard";
-import type { BaseOrgType } from "./orgs";
 
 interface BrowseDrawerInterface {
   open: boolean;

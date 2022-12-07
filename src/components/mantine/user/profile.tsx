@@ -15,8 +15,7 @@ import { useRef, useState } from "react";
 import { z } from "zod";
 
 import { PatchUserMe, PostUserMe } from "@/services";
-
-import type { MeOrgType } from "./orgs";
+import type { MeType } from "@/types";
 
 const schema = z.object({
   name: z.string().min(2, { message: "Name should have at least 2 letters" }),
@@ -24,17 +23,6 @@ const schema = z.object({
   contact_number: z.string().min(10, { message: "Invalid contact number" }),
   fblink: z.string().url({ message: "Invalid URL" }),
 });
-
-export type MeType = {
-  name: string;
-  email: string;
-  contact_number: string;
-  links: {
-    link: string;
-    site: string;
-  }[];
-  orgs: MeOrgType[];
-};
 
 interface ProfileInterface {
   me: MeType | null;

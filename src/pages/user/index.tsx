@@ -8,11 +8,11 @@ import {
 } from "next-firebase-auth";
 
 import Orgs from "@/components/mantine/user/orgs";
-import type { MeType } from "@/components/mantine/user/profile";
 import Profile from "@/components/mantine/user/profile";
 import { Meta } from "@/layouts/Meta";
 import { GetUserMe } from "@/services";
 import { Main } from "@/templates/Main";
+import type { MeType } from "@/types";
 
 export interface MeProps {
   me: MeType | null;

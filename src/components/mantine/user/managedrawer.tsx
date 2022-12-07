@@ -11,9 +11,13 @@ import {
   UnstyledButton,
   useMantineTheme,
 } from "@mantine/core";
+import { useAuthUser } from "next-firebase-auth";
+import { useState } from "react";
+
+import { ChangeBadge } from "@/services";
+import type { MeOrgType } from "@/types";
 
 import { Label } from "../label";
-import type { MeOrgType } from "./orgs";
 
 interface ManageDrawerInterface {
   open: boolean;
@@ -23,14 +27,26 @@ interface ManageDrawerInterface {
 
 export const ManageDrawer = ({ open, setOpen, org }: ManageDrawerInterface) => {
   const theme = useMantineTheme();
+  const AuthUser = useAuthUser();
+
+  const [isDirty, setIsDirty] = useState(false);
+  const [activeBadge, setActiveBadge] = useState(org?.active_badge);
 
   if (!org) return null;
+
   const badges = () => {
     if (!org) return null;
     return org.badges.map((badge) => (
-      <UnstyledButton key={badge.name} onClick={() => {}}>
+      <UnstyledButton
+        key={badge.name}
+        onClick={() => {
+          console.log("active badge", badge.name);
+          setActiveBadge(badge.name);
+          setIsDirty(true);
+        }}
+      >
         <Group>
-          {org.active_badge === badge.name ? (
+          {(activeBadge ?? org.active_badge) === badge.name ? (
             <Indicator label="active" size={12}>
               <Avatar src={badge.link} />
             </Indicator>
@@ -83,7 +99,20 @@ export const ManageDrawer = ({ open, setOpen, org }: ManageDrawerInterface) => {
         >
           Cancel
         </Button>
-        <Button onClick={() => {}}>Save</Button>
+        <Button
+          disabled={!isDirty}
+          onClick={async () => {
+            setIsDirty(false);
+            const token = await AuthUser.getIdToken();
+            await ChangeBadge({
+              token: token!,
+              org,
+              badge: activeBadge!,
+            });
+          }}
+        >
+          Save
+        </Button>
       </Group>
     </Drawer>
   );

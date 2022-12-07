@@ -158,7 +158,7 @@ export const ChangeBadge = async ({
         active_badge: badge,
       }),
     });
-    return await changeBadgeResponse.json();
+    return changeBadgeResponse;
   } catch (error) {
     console.log(error);
     return error;
