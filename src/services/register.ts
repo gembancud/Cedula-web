@@ -1,3 +1,4 @@
+import type { MeOrgType } from "@/types";
 import { upload } from "@/utils/cloudinary";
 import { url } from "@/utils/constants";
 
@@ -131,4 +132,35 @@ export const Signup = async ({
     return uploadResponse.json();
   }
   return data;
+};
+
+interface ChangeBadgeInterface {
+  token: string;
+  org: MeOrgType;
+  badge: string;
+}
+
+export const ChangeBadge = async ({
+  token,
+  org,
+  badge,
+}: ChangeBadgeInterface) => {
+  try {
+    const changeBadgeResponse = await fetch(`${url}/register/${org.name}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: token || "unauthenticated",
+      },
+      body: JSON.stringify({
+        badges: org.badges,
+        active_badge: badge,
+      }),
+    });
+    return await changeBadgeResponse.json();
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };
