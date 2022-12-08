@@ -29,7 +29,6 @@ interface ProfileInterface {
 }
 
 const Profile = ({ me }: ProfileInterface) => {
-  console.log("me", me);
   const AuthUser = useAuthUser();
   const [captchaToken, setCaptchaToken] = useState("");
   const captchaRef = useRef<HCaptcha | null>(null);

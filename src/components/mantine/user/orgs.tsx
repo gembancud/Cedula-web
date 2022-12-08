@@ -5,8 +5,7 @@ import { useState } from "react";
 import { GetOrgs } from "@/services";
 import type { BaseOrgType, MeOrgType, MeType } from "@/types";
 
-import { BrowseDrawer } from "./browsedrawer";
-import { ManageDrawer } from "./managedrawer";
+import { BrowseDrawer, JoinDrawer, ManageDrawer, ViewDrawer } from "./drawer";
 import { OrgCard } from "./OrgCard";
 
 interface OrgsInterface {
@@ -14,8 +13,8 @@ interface OrgsInterface {
 }
 
 const Orgs = ({ me }: OrgsInterface) => {
-  const [openManageDrawer, setOpenManageDrawer] = useState(false);
-  const [openJoinDrawer, setOpenJoinDrawer] = useState(false);
+  // 0 = closed, 1 = manage, 2 = browse, 3 = view, 4 = join
+  const [drawerState, setDrawerState] = useState<number>(0);
   const [allOrgs, setAllOrgs] = useState<BaseOrgType[] | null>(null);
   const [selectedOrg, setSelectedOrg] = useState<
     BaseOrgType | MeOrgType | null
@@ -25,16 +24,28 @@ const Orgs = ({ me }: OrgsInterface) => {
   //
 
   return (
-    <>
+    <div>
       {ManageDrawer({
-        open: openManageDrawer,
-        setOpen: setOpenManageDrawer,
+        open: drawerState === 1,
+        setDrawerState,
         org: selectedOrg as MeOrgType,
       })}
       {BrowseDrawer({
-        open: openJoinDrawer,
-        setOpen: setOpenJoinDrawer,
+        open: drawerState === 2,
+        setDrawerState,
         orgs: allOrgs as BaseOrgType[],
+        setSelectedOrg,
+      })}
+      {ViewDrawer({
+        open: drawerState === 3,
+        setBrowserState: setDrawerState,
+        org: selectedOrg as BaseOrgType,
+        setSelectedOrg,
+      })}
+      {JoinDrawer({
+        open: drawerState === 4,
+        setBrowserState: setDrawerState,
+        org: selectedOrg as BaseOrgType,
       })}
       <Stack
         spacing="md"
@@ -51,7 +62,7 @@ const Orgs = ({ me }: OrgsInterface) => {
                 key={org.name}
                 onClick={() => {
                   setSelectedOrg(org);
-                  setOpenManageDrawer(true);
+                  setDrawerState(1);
                 }}
               >
                 <OrgCard
@@ -70,15 +81,14 @@ const Orgs = ({ me }: OrgsInterface) => {
           onClick={async () => {
             const orgsResponse = await GetOrgs();
             setAllOrgs(orgsResponse.orgs);
-
-            setOpenJoinDrawer(true);
+            setDrawerState(2);
           }}
         >
           {" "}
           Join an organization{" "}
         </Button>
       </Stack>
-    </>
+    </div>
   );
 };
 

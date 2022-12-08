@@ -2,23 +2,26 @@ import { Drawer, useMantineTheme } from "@mantine/core";
 
 import type { BaseOrgType } from "@/types";
 
-import { OrgCard } from "./OrgCard";
+import { OrgCard } from "../OrgCard";
 
 interface BrowseDrawerInterface {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setDrawerState: (val: number) => void;
   orgs: BaseOrgType[];
+  setSelectedOrg: (org: BaseOrgType) => void;
 }
 export const BrowseDrawer = ({
   open,
-  setOpen,
+  setDrawerState,
   orgs,
+  setSelectedOrg,
 }: BrowseDrawerInterface) => {
   const theme = useMantineTheme();
+
   return (
     <Drawer
       opened={open}
-      onClose={() => setOpen(false)}
+      onClose={() => setDrawerState(0)}
       title="Join an Organization"
       padding="xl"
       size="xl"
@@ -38,6 +41,10 @@ export const BrowseDrawer = ({
             name={org.name}
             description={org.description}
             stats={[]}
+            onClick={() => {
+              setSelectedOrg(org);
+              setDrawerState(3);
+            }}
           />
         ))}
     </Drawer>

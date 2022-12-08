@@ -17,15 +17,19 @@ import { useState } from "react";
 import { ChangeBadge } from "@/services";
 import type { MeOrgType } from "@/types";
 
-import { Label } from "../label";
+import { Label } from "../../label";
 
 interface ManageDrawerInterface {
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setDrawerState: (val: number) => void;
   org: MeOrgType | null;
 }
 
-export const ManageDrawer = ({ open, setOpen, org }: ManageDrawerInterface) => {
+export const ManageDrawer = ({
+  open,
+  setDrawerState,
+  org,
+}: ManageDrawerInterface) => {
   const theme = useMantineTheme();
   const AuthUser = useAuthUser();
 
@@ -35,7 +39,7 @@ export const ManageDrawer = ({ open, setOpen, org }: ManageDrawerInterface) => {
   if (!org) return null;
 
   const badges = () => {
-    if (!org) return null;
+    if (!org.badges) return null;
     return org.badges.map((badge) => (
       <UnstyledButton
         key={badge.name}
@@ -59,11 +63,10 @@ export const ManageDrawer = ({ open, setOpen, org }: ManageDrawerInterface) => {
     ));
   };
 
-  if (!org) return null;
   return (
     <Drawer
       opened={open}
-      onClose={() => setOpen(false)}
+      onClose={() => setDrawerState(0)}
       title="Manage Organization"
       padding="xl"
       size="xl"
@@ -84,17 +87,22 @@ export const ManageDrawer = ({ open, setOpen, org }: ManageDrawerInterface) => {
         alt="Random unsplash image"
       />
       <Label label="Name" value={org.name} />
+      <Label label="Website" value={org.website} />
       <Label label="Description" value={org.description} />
       <Label label="Status" value={org.status} />
 
-      <Title order={4}>Badges</Title>
-      <Stack align="flex-start">{badges()}</Stack>
+      {org.badges && (
+        <>
+          <Title order={4}>Badges</Title>
+          <Stack align="flex-start">{badges()}</Stack>
+        </>
+      )}
 
       <Group position="right" mt="xl">
         <Button
           variant="default"
           onClick={() => {
-            setOpen(false);
+            setDrawerState(0);
           }}
         >
           Cancel

@@ -5,6 +5,7 @@ import {
   Image,
   RingProgress,
   Text,
+  UnstyledButton,
 } from "@mantine/core";
 
 const useStyles = createStyles((theme) => ({
@@ -40,6 +41,7 @@ interface OrgCardInterface {
         value: string;
       }[]
     | null;
+  onClick?: () => void;
 }
 
 export function OrgCard({
@@ -47,6 +49,7 @@ export function OrgCard({
   name: title,
   description,
   stats,
+  onClick,
 }: OrgCardInterface) {
   const { classes } = useStyles();
 
@@ -62,26 +65,33 @@ export function OrgCard({
   ));
 
   return (
-    <Card withBorder p="lg" className={classes.card}>
-      <Card.Section>
-        <Image src={image} alt={title} height={100} />
-      </Card.Section>
+    <UnstyledButton
+      sx={{
+        width: "100%",
+      }}
+      onClick={onClick}
+    >
+      <Card withBorder p="lg" className={classes.card}>
+        <Card.Section>
+          <Image src={image} alt={title} height={100} />
+        </Card.Section>
 
-      <Group position="apart" mt="xl">
-        <Text size="sm" weight={700} className={classes.title}>
-          {title}
-        </Text>
-        <Group spacing={5}>
-          <Text size="xs" color="dimmed">
-            80% completed
+        <Group position="apart" mt="xl">
+          <Text size="sm" weight={700} className={classes.title}>
+            {title}
           </Text>
-          <RingProgress size={18} sections={[{ value: 80, color: "blue" }]} />
+          <Group spacing={5}>
+            <Text size="xs" color="dimmed">
+              80% completed
+            </Text>
+            <RingProgress size={18} sections={[{ value: 80, color: "blue" }]} />
+          </Group>
         </Group>
-      </Group>
-      <Text mt="sm" mb="md" color="dimmed" size="xs">
-        {description}
-      </Text>
-      <Card.Section className={classes.footer}>{items}</Card.Section>
-    </Card>
+        <Text mt="sm" mb="md" color="dimmed" size="xs">
+          {description}
+        </Text>
+        <Card.Section className={classes.footer}>{items}</Card.Section>
+      </Card>
+    </UnstyledButton>
   );
 }
