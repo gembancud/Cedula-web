@@ -50,7 +50,7 @@ const Index = ({ me }: MeProps) => {
 };
 export const getServerSideProps = withAuthUserTokenSSR({
   whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-  authPageURL: "/login",
+  authPageURL: "/login/",
   whenAuthed: AuthAction.RENDER,
 })(async ({ AuthUser }) => {
   try {
@@ -79,6 +79,6 @@ export default withAuthUser<MeProps>({
   whenUnauthedBeforeInit: AuthAction.SHOW_LOADER,
   LoaderComponent: () => <div>Loading...</div>,
   whenUnauthedAfterInit: AuthAction.REDIRECT_TO_LOGIN,
-  authPageURL: "/login",
+  authPageURL: "/login/",
   whenAuthed: AuthAction.RENDER,
 })(Index);

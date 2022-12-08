@@ -9,7 +9,6 @@ import {
   Menu,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { NextLink } from "@mantine/next";
 import { IconChevronDown, IconLogout, IconSettings } from "@tabler/icons";
 // import { MantineLogo } from "@mantine/ds";
 import Image from "next/image";
@@ -202,10 +201,12 @@ export default function HeaderAction({ links }: HeaderActionProps) {
           menu()
         ) : (
           <Button
-            component={NextLink}
-            href="login"
             radius="xl"
             sx={{ height: 30 }}
+            onClick={(event) => {
+              event.preventDefault();
+              router.replace("/login");
+            }}
           >
             Login to Cedula
           </Button>

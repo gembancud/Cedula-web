@@ -1,6 +1,6 @@
 import { Button, Container, createStyles, Group, Text } from "@mantine/core";
-import { NextLink } from "@mantine/next";
 import { IconBrandChrome } from "@tabler/icons";
+import { useRouter } from "next/router";
 
 const BREAKPOINT = "@media (max-width: 755px)";
 
@@ -73,6 +73,7 @@ const useStyles = createStyles((theme) => ({
 
 export default function HeroTitle() {
   const { classes } = useStyles();
+  const router = useRouter();
 
   return (
     <div className={classes.wrapper}>
@@ -100,8 +101,10 @@ export default function HeroTitle() {
             className={classes.control}
             variant="gradient"
             gradient={{ from: "blue", to: "cyan" }}
-            component={NextLink}
-            href="/signup"
+            onClick={(event) => {
+              event.preventDefault();
+              router.push("/signup");
+            }}
           >
             Sign up
           </Button>
