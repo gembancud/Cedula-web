@@ -1,23 +1,30 @@
 import { Button, Drawer, Image, useMantineTheme } from "@mantine/core";
 
-import type { BaseOrgType } from "@/types";
+import type { BaseOrgType, MeType } from "@/types";
 
 import { Label } from "../../label";
 
 interface ViewDrawerInterface {
+  me: MeType;
   open: boolean;
   setBrowserState: (open: number) => void;
   org: BaseOrgType;
   setSelectedOrg: (org: BaseOrgType) => void;
 }
 export const ViewDrawer = ({
+  me,
   open,
   setBrowserState,
   org,
   setSelectedOrg,
 }: ViewDrawerInterface) => {
   const theme = useMantineTheme();
+
   if (!org) return null;
+
+  const hasJoined =
+    me.orgs.find((myOrg) => myOrg.name === org.name) !== undefined;
+
   return (
     <Drawer
       opened={open}
@@ -46,14 +53,25 @@ export const ViewDrawer = ({
       <Label label="Description" value={org.description} />
       <Label label="Requirements" value={org.requirements} />
 
-      <Button
-        onClick={() => {
-          setSelectedOrg(org);
-          setBrowserState(4);
-        }}
-      >
-        Join
-      </Button>
+      {hasJoined ? (
+        <Button
+          onClick={() => {
+            setSelectedOrg(me.orgs.find((myOrg) => myOrg.name === org.name)!);
+            setBrowserState(1);
+          }}
+        >
+          Manage
+        </Button>
+      ) : (
+        <Button
+          onClick={() => {
+            setSelectedOrg(org);
+            setBrowserState(4);
+          }}
+        >
+          Join
+        </Button>
+      )}
     </Drawer>
   );
 };

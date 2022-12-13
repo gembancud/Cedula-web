@@ -1,16 +1,18 @@
-import { Paper, Tabs } from "@mantine/core";
+import { Paper, Tabs, UnstyledButton } from "@mantine/core";
 import { IconAffiliate, IconUser } from "@tabler/icons";
 import { useRouter } from "next/router";
 import {
   AuthAction,
+  useAuthUser,
   withAuthUser,
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
+import { useEffect, useState } from "react";
 
 import Orgs from "@/components/mantine/user/orgs";
 import Profile from "@/components/mantine/user/profile";
 import { Meta } from "@/layouts/Meta";
-import { GetUserMe } from "@/services";
+import { GetEvaluator, GetUserMe } from "@/services";
 import { Main } from "@/templates/Main";
 import type { MeType } from "@/types";
 
@@ -20,9 +22,27 @@ export interface MeProps {
 
 const Index = ({ me }: MeProps) => {
   const router = useRouter();
+  const AuthUser = useAuthUser();
+  const [loaded, setLoaded] = useState(false);
+  const [isEvaluator, setIsEvaluator] = useState(false);
   if (me === null) {
     router.push("/login");
   }
+
+  useEffect(() => {
+    const checkEvaluator = async () => {
+      const token = await AuthUser.getIdToken();
+      if (token) {
+        const evaluatorResponse = await GetEvaluator({ token });
+        if (evaluatorResponse.status === 200) {
+          setLoaded(true);
+          setIsEvaluator(true);
+        }
+      }
+    };
+    if (!loaded) checkEvaluator();
+  });
+
   return (
     <Main meta={<Meta title="My Profile" description="Edit your profile" />}>
       <Paper shadow="md" radius="xl" p="xl" withBorder>
@@ -34,6 +54,15 @@ const Index = ({ me }: MeProps) => {
             <Tabs.Tab value="organizations" icon={<IconAffiliate size={14} />}>
               Organizations
             </Tabs.Tab>
+            {isEvaluator && (
+              <UnstyledButton
+                onClick={() => {
+                  router.replace("/verify");
+                }}
+              >
+                Verify
+              </UnstyledButton>
+            )}
           </Tabs.List>
 
           <Tabs.Panel value="profile" pt="xs">

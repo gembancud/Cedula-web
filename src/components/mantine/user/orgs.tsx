@@ -1,4 +1,4 @@
-import { Button, Stack, Title, UnstyledButton } from "@mantine/core";
+import { Button, Group, Stack, Title, UnstyledButton } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import { useState } from "react";
 
@@ -19,9 +19,6 @@ const Orgs = ({ me }: OrgsInterface) => {
   const [selectedOrg, setSelectedOrg] = useState<
     BaseOrgType | MeOrgType | null
   >(null);
-  console.log("me", me);
-  // const AuthUser = useAuthUser();
-  //
 
   return (
     <div>
@@ -37,6 +34,7 @@ const Orgs = ({ me }: OrgsInterface) => {
         setSelectedOrg,
       })}
       {ViewDrawer({
+        me,
         open: drawerState === 3,
         setBrowserState: setDrawerState,
         org: selectedOrg as BaseOrgType,
@@ -54,7 +52,20 @@ const Orgs = ({ me }: OrgsInterface) => {
           padding: "5% 20%",
         })}
       >
-        <Title order={3}>My Organizations</Title>
+        <Group position="apart">
+          <Title order={3}>My Organizations</Title>
+          <Button
+            leftIcon={<IconPlus />}
+            onClick={async () => {
+              const orgsResponse = await GetOrgs();
+              setAllOrgs(orgsResponse.orgs);
+              setDrawerState(2);
+            }}
+          >
+            {" "}
+            Join an organization{" "}
+          </Button>
+        </Group>
         <Stack>
           {me.orgs.map((org: MeOrgType) => (
             <>
@@ -75,18 +86,6 @@ const Orgs = ({ me }: OrgsInterface) => {
             </>
           ))}
         </Stack>
-
-        <Button
-          leftIcon={<IconPlus />}
-          onClick={async () => {
-            const orgsResponse = await GetOrgs();
-            setAllOrgs(orgsResponse.orgs);
-            setDrawerState(2);
-          }}
-        >
-          {" "}
-          Join an organization{" "}
-        </Button>
       </Stack>
     </div>
   );
