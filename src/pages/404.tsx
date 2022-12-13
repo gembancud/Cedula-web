@@ -7,6 +7,7 @@ import {
   Title,
 } from "@mantine/core";
 import { NextLink } from "@mantine/next";
+import { withAuthUser } from "next-firebase-auth";
 
 import { Meta } from "@/layouts/Meta";
 import { Main } from "@/templates/Main";
@@ -52,7 +53,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-export default function NotFoundTitle() {
+function NotFoundTitle() {
   const { classes } = useStyles();
 
   return (
@@ -78,3 +79,5 @@ export default function NotFoundTitle() {
     </Main>
   );
 }
+
+export default withAuthUser()(NotFoundTitle);
