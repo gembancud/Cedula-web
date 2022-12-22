@@ -3,7 +3,6 @@ import {
   createStyles,
   Group,
   Image,
-  RingProgress,
   Text,
   UnstyledButton,
 } from "@mantine/core";
@@ -84,7 +83,6 @@ export function OrgCard({
             <Text size="xs" color="dimmed">
               80% completed
             </Text>
-            <RingProgress size={18} sections={[{ value: 80, color: "blue" }]} />
           </Group>
         </Group>
         <Text mt="sm" mb="md" color="dimmed" size="xs">
