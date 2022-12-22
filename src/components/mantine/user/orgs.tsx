@@ -41,6 +41,7 @@ const Orgs = ({ me }: OrgsInterface) => {
         setSelectedOrg,
       })}
       {JoinDrawer({
+        me,
         open: drawerState === 4,
         setBrowserState: setDrawerState,
         org: selectedOrg as BaseOrgType,

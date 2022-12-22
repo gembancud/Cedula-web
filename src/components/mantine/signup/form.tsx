@@ -84,13 +84,8 @@ const Form = () => {
 
       const SignupResponse = await Signup({
         authToken,
-        name: form.values.name,
         email: form.values.email,
-        contact_number: form.values.contact_number,
         org: "Philippines",
-        fblink: form.values.fblink,
-        twitterlink: form.values.twitterlink,
-        redditlink: form.values.redditlink,
         captchaToken,
         files,
       });

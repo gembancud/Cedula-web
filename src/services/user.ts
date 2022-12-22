@@ -20,7 +20,7 @@ export const GetUserMe = async ({ token }: UserMeInterface): Promise<any> => {
   }
 };
 
-interface PoseUserMeInterface {
+interface PostUserMeInterface {
   authToken: string;
   name: string;
   email: string;
@@ -40,7 +40,7 @@ export const PostUserMe = async ({
   twitterlink,
   redditlink,
   captchaToken,
-}: PoseUserMeInterface) => {
+}: PostUserMeInterface) => {
   try {
     const postUserMeResponse = await fetch(`${url}/user`, {
       method: "POST",
@@ -77,7 +77,7 @@ export const PatchUserMe = async ({
   twitterlink,
   redditlink,
   captchaToken,
-}: PoseUserMeInterface) => {
+}: PostUserMeInterface) => {
   try {
     const patchUserMeResponse = await fetch(`${url}/user`, {
       method: "PATCH",

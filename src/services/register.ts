@@ -4,25 +4,15 @@ import { url } from "@/utils/constants";
 
 interface RegisterInterface {
   authToken: string;
-  name: string;
   email: string;
-  contact_number: string;
   org: string;
-  fblink: string;
-  twitterlink: string;
-  redditlink: string;
   captchaToken: string;
 }
 
 const Register = async ({
   authToken,
-  name,
   email,
-  contact_number,
   org,
-  fblink,
-  twitterlink,
-  redditlink,
   captchaToken,
 }: RegisterInterface) => {
   const registerResponse = await fetch(`${url}/register`, {
@@ -33,15 +23,8 @@ const Register = async ({
       Authorization: authToken || "unauthenticated",
     },
     body: JSON.stringify({
-      name,
       email,
-      contact_number,
       org,
-      links: [
-        { link: fblink, site: "fb" },
-        { link: twitterlink, site: "twitter" },
-        { link: redditlink, site: "reddit" },
-      ],
       captchaToken,
     }),
   });
@@ -85,42 +68,27 @@ const Upload = async ({
 
 interface SignupInterface {
   authToken: string;
-  name: string;
   email: string;
-  contact_number: string;
   org: string;
-  fblink: string;
-  twitterlink: string;
-  redditlink: string;
   captchaToken: string;
   files: string[];
 }
 export const Signup = async ({
   authToken,
-  name,
   email,
-  contact_number,
   org,
-  fblink,
-  twitterlink,
-  redditlink,
   captchaToken,
   files,
 }: SignupInterface) => {
   const registerResponse = await Register({
     authToken,
-    name,
     email,
-    contact_number,
     org,
-    fblink,
-    twitterlink,
-    redditlink,
     captchaToken,
   });
   const data = await registerResponse.json();
   const { cloudinary } = data;
-  if (registerResponse.status === 200 && files.length > 0) {
+  if (registerResponse.status === 201 && files.length > 0) {
     const uploadResponse = await Upload({
       files,
       org,
@@ -129,9 +97,9 @@ export const Signup = async ({
       email,
     });
 
-    return uploadResponse.json();
+    return uploadResponse;
   }
-  return data;
+  return registerResponse;
 };
 
 interface ChangeBadgeInterface {

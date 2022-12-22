@@ -1,27 +1,46 @@
-import { Drawer, Group, Image, useMantineTheme } from "@mantine/core";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import {
+  Button,
+  Drawer,
+  Group,
+  Image,
+  Stack,
+  useMantineTheme,
+} from "@mantine/core";
 import type { FileWithPath } from "@mantine/dropzone";
-import { useState } from "react";
+import { useAuthUser } from "next-firebase-auth";
+import { useRef, useState } from "react";
 
-import type { BaseOrgType } from "@/types";
+import { Signup } from "@/services";
+import type { BaseOrgType, MeType } from "@/types";
 
 import { Label } from "../../label";
 import DropZone from "../../signup/dropzone";
 import FileBadge from "../../signup/filebadge";
 
 interface JoinDrawerInterface {
+  me: MeType;
   open: boolean;
   setBrowserState: (open: number) => void;
   org: BaseOrgType;
 }
 export const JoinDrawer = ({
+  me,
   open,
   setBrowserState,
   org,
 }: JoinDrawerInterface) => {
   const theme = useMantineTheme();
+  const AuthUser = useAuthUser();
 
+  const [captchaToken, setCaptchaToken] = useState("");
+  const captchaRef = useRef<HCaptcha | null>(null);
   const [files, setFiles] = useState<string[]>([]);
   const [filenames, setFilenames] = useState<string[]>([]);
+
+  const onLoad = () => {
+    if (captchaRef != null) captchaRef!.current!.execute();
+  };
 
   const setFilesCallback = (newfiles: FileWithPath[]) => {
     const tempfiles = [...files];
@@ -96,6 +115,41 @@ export const JoinDrawer = ({
         })}
       </Group>
       <DropZone setFilesCallback={setFilesCallback} />
+
+      <Group position="right" mt="xl">
+        <Stack>
+          <HCaptcha
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+            onLoad={onLoad}
+            onVerify={setCaptchaToken}
+            ref={captchaRef}
+          />
+
+          <Button
+            onClick={async () => {
+              try {
+                const authToken = await AuthUser.getIdToken();
+                if (authToken === null) throw new Error("No auth token");
+                const signUpResponse = await Signup({
+                  authToken,
+                  email: me.email,
+                  org: org.name,
+                  captchaToken,
+                  files,
+                });
+
+                if (signUpResponse.status === 201) {
+                  window.location.reload();
+                }
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            Join
+          </Button>
+        </Stack>
+      </Group>
     </Drawer>
   );
 };

@@ -25,9 +25,6 @@ const Index = ({ me }: MeProps) => {
   const AuthUser = useAuthUser();
   const [loaded, setLoaded] = useState(false);
   const [isEvaluator, setIsEvaluator] = useState(false);
-  if (me === null) {
-    router.push("/login");
-  }
 
   useEffect(() => {
     const checkEvaluator = async () => {
@@ -51,7 +48,11 @@ const Index = ({ me }: MeProps) => {
             <Tabs.Tab value="profile" icon={<IconUser size={14} />}>
               Profile
             </Tabs.Tab>
-            <Tabs.Tab value="organizations" icon={<IconAffiliate size={14} />}>
+            <Tabs.Tab
+              disabled={me === null}
+              value="organizations"
+              icon={<IconAffiliate size={14} />}
+            >
               Organizations
             </Tabs.Tab>
             {isEvaluator && (
@@ -69,9 +70,11 @@ const Index = ({ me }: MeProps) => {
             <Profile me={me} />
           </Tabs.Panel>
 
-          <Tabs.Panel value="organizations" pt="xs">
-            <Orgs me={me!} />
-          </Tabs.Panel>
+          {me && (
+            <Tabs.Panel value="organizations" pt="xs">
+              <Orgs me={me} />
+            </Tabs.Panel>
+          )}
         </Tabs>
       </Paper>
     </Main>
