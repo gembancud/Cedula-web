@@ -10,6 +10,7 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { openConfirmModal } from "@mantine/modals";
+import { useRouter } from "next/router";
 import { useAuthUser } from "next-firebase-auth";
 import { useRef, useState } from "react";
 import { z } from "zod";
@@ -29,6 +30,7 @@ interface ProfileInterface {
 }
 
 const Profile = ({ me }: ProfileInterface) => {
+  const router = useRouter();
   const AuthUser = useAuthUser();
   const [captchaToken, setCaptchaToken] = useState("");
   const captchaRef = useRef<HCaptcha | null>(null);
@@ -45,7 +47,7 @@ const Profile = ({ me }: ProfileInterface) => {
     validateInputOnChange: ["name", "email", "contact_number", "fblink"],
     initialValues: {
       name: me ? me.name : "",
-      email: me ? me.email : "",
+      email: AuthUser.email,
       contact_number: me ? me.contact_number : "",
       fblink: me ? me.links.filter((link) => link.site === "fb")[0]!.link : "",
       twitterlink: me
@@ -69,30 +71,39 @@ const Profile = ({ me }: ProfileInterface) => {
         response = await PatchUserMe({
           authToken,
           name: form.values.name,
-          email: form.values.email,
+          email: AuthUser.email!,
           contact_number: form.values.contact_number,
           fblink: form.values.fblink,
           twitterlink: form.values.twitterlink,
           redditlink: form.values.redditlink,
           captchaToken,
         });
+
+        if ((response as Response).status === 200) {
+          window.location.reload();
+        } else {
+          throw new Error("Error updating profile");
+        }
       } else {
         response = await PostUserMe({
           authToken,
           name: form.values.name,
-          email: form.values.email,
+          email: form.values.email!,
           contact_number: form.values.contact_number,
           fblink: form.values.fblink,
           twitterlink: form.values.twitterlink,
           redditlink: form.values.redditlink,
           captchaToken,
         });
-      }
-      if (response) {
-        window.location.reload();
+        if ((response as Response).status === 201) {
+          router.push("/user");
+        } else {
+          throw new Error("Error creating profile");
+        }
       }
     } catch (error) {
       console.log(error);
+      window.location.reload();
     }
   };
 
@@ -126,17 +137,17 @@ const Profile = ({ me }: ProfileInterface) => {
       >
         <TextInput
           withAsterisk
-          label="Name (Full Name)"
-          placeholder="Juan Dela Cruz"
-          {...form.getInputProps("name")}
+          label="Email"
+          placeholder="your@email.com"
+          {...form.getInputProps("email")}
+          disabled
         />
 
         <TextInput
           withAsterisk
-          label="Email"
-          placeholder="your@email.com"
-          {...form.getInputProps("email")}
-          disabled={me}
+          label="Name (Full Name)"
+          placeholder="Juan Dela Cruz"
+          {...form.getInputProps("name")}
         />
 
         <TextInput
