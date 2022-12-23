@@ -56,7 +56,7 @@ export const VerifyShow = () => {
     const verifyResponse = await VerifyUser({
       token: userToken,
       email: data.email,
-      org: "Philippines",
+      org: data.org,
       evaluation: evaluationValue!,
       comment: evaluationComment,
     });
