@@ -89,8 +89,9 @@ export const getServerSideProps = withAuthUserTokenSSR({
     const token = await AuthUser.getIdToken();
     if (!token) throw new Error("No token");
 
-    const me = await GetUserMe({ token });
-    if (me) {
+    const meResponse = await GetUserMe({ token });
+    if (meResponse.status === 200) {
+      const me = await meResponse.json();
       return {
         props: {
           me,
