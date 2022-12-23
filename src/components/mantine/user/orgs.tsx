@@ -67,26 +67,31 @@ const Orgs = ({ me }: OrgsInterface) => {
             Join an organization{" "}
           </Button>
         </Group>
-        <Stack>
-          {me.orgs.map((org: MeOrgType) => (
-            <>
-              <UnstyledButton
-                key={org.name}
-                onClick={() => {
-                  setSelectedOrg(org);
-                  setDrawerState(1);
-                }}
-              >
-                <OrgCard
-                  image={org.image}
-                  name={org.name}
-                  description={org.description}
-                  stats={[]}
-                />
-              </UnstyledButton>
-            </>
-          ))}
-        </Stack>
+        {me && me.orgs.length > 0 && (
+          <div>
+            <Stack>
+              {me.orgs.map((org: MeOrgType) => (
+                <div key={org.name}>
+                  <UnstyledButton
+                    key={org.name}
+                    onClick={() => {
+                      setSelectedOrg(org);
+                      setDrawerState(1);
+                    }}
+                  >
+                    <OrgCard
+                      key={org.name}
+                      image={org.image}
+                      name={org.name}
+                      description={org.description}
+                      stats={[]}
+                    />
+                  </UnstyledButton>
+                </div>
+              ))}
+            </Stack>
+          </div>
+        )}
       </Stack>
     </div>
   );
