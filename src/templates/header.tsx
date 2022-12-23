@@ -90,8 +90,11 @@ export default function HeaderAction({ links }: HeaderActionProps) {
         const token = await AuthUser.getIdToken();
         if (!token) throw new Error("Token invalid");
         const response = await GetUserMe({ token: token! });
-        setUser(response);
-        setLoaded(true);
+        if (response.status === 200) {
+          const tmpUser = await response.json();
+          setUser(tmpUser);
+          setLoaded(true);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -196,7 +199,7 @@ export default function HeaderAction({ links }: HeaderActionProps) {
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
-        {user && <Tag />}
+        <Tag />
         {user ? (
           menu()
         ) : (
