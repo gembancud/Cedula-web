@@ -6,14 +6,14 @@ interface UserMeInterface {
 
 export const GetUserMe = async ({ token }: UserMeInterface): Promise<any> => {
   try {
-    const verifyresponse = await fetch(`${url}/user/me`, {
+    const response = await fetch(`${url}/user/me`, {
       method: "GET",
       headers: {
         Accept: "application/json",
         Authorization: token || "unauthenticated",
       },
     });
-    return await verifyresponse.json();
+    return response;
   } catch (error) {
     console.log(error);
     return error;
@@ -40,7 +40,7 @@ export const PostUserMe = async ({
   twitterlink,
   redditlink,
   captchaToken,
-}: PostUserMeInterface) => {
+}: PostUserMeInterface): Promise<Response | unknown> => {
   try {
     const postUserMeResponse = await fetch(`${url}/user`, {
       method: "POST",
@@ -77,7 +77,7 @@ export const PatchUserMe = async ({
   twitterlink,
   redditlink,
   captchaToken,
-}: PostUserMeInterface) => {
+}: PostUserMeInterface): Promise<Response | unknown> => {
   try {
     const patchUserMeResponse = await fetch(`${url}/user`, {
       method: "PATCH",

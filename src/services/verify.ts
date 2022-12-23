@@ -30,7 +30,7 @@ export const VerifyUser = async ({
       }),
     });
 
-    return await verifyResponse.json();
+    return verifyResponse;
   } catch (err) {
     console.log(err);
     return err;
