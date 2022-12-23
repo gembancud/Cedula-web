@@ -1,20 +1,26 @@
+import { Paper } from "@mantine/core";
+import { useRouter } from "next/router";
 import {
   AuthAction,
   withAuthUser,
   withAuthUserTokenSSR,
 } from "next-firebase-auth";
 
-import Form from "@/components/mantine/signup/form";
+import Profile from "@/components/mantine/user/profile";
 import { Meta } from "@/layouts/Meta";
 import { GetUserMe } from "@/services";
 import { Main } from "@/templates/Main";
+import type { MeType } from "@/types";
 
 export interface SignupProps {
-  signup: object[] | null;
+  me: MeType | null;
 }
 
-const Index = ({ signup }: SignupProps) => {
-  console.log("signup", signup);
+const Index = ({ me }: SignupProps) => {
+  const router = useRouter();
+  if (me !== null) {
+    router.replace("/user");
+  }
   return (
     <Main
       meta={
@@ -24,11 +30,9 @@ const Index = ({ signup }: SignupProps) => {
         />
       }
     >
-      {signup === null || signup.length === 0 ? (
-        <Form />
-      ) : (
-        <div> {JSON.stringify(signup)}</div>
-      )}
+      <Paper shadow="md" radius="xl" p="xl" withBorder>
+        <Profile me={me} />
+      </Paper>
     </Main>
   );
 };
@@ -41,11 +45,12 @@ export const getServerSideProps = withAuthUserTokenSSR({
     const token = await AuthUser.getIdToken();
     if (!token) throw new Error("No token");
 
-    const signup = await GetUserMe({ token });
-    if (signup) {
+    const meResponse = await GetUserMe({ token });
+    if (meResponse.status === 200) {
+      const me = await meResponse.json();
       return {
         props: {
-          signup,
+          me,
         },
       };
     }
@@ -54,7 +59,7 @@ export const getServerSideProps = withAuthUserTokenSSR({
   }
   return {
     props: {
-      signup: null,
+      me: null,
     },
   };
 });
