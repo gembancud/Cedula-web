@@ -4,7 +4,7 @@ import firebaseClientInitConfig from "./firebaseConfig";
 
 const initAuth = () => {
   init({
-    debug: true,
+    debug: process.env.AUTH_DEBUG === "true",
     authPageURL: "/login/",
     appPageURL: "/",
     loginAPIEndpoint: "/api/login/",
