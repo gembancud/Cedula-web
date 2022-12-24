@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Title, UnstyledButton } from "@mantine/core";
+import { Button, Group, Stack, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons";
 import { useState } from "react";
 
@@ -71,23 +71,17 @@ const Orgs = ({ me }: OrgsInterface) => {
           <div>
             <Stack>
               {me.orgs.map((org: MeOrgType) => (
-                <div key={org.name}>
-                  <UnstyledButton
-                    key={org.name}
-                    onClick={() => {
-                      setSelectedOrg(org);
-                      setDrawerState(1);
-                    }}
-                  >
-                    <OrgCard
-                      key={org.name}
-                      image={org.image}
-                      name={org.name}
-                      description={org.description}
-                      stats={[]}
-                    />
-                  </UnstyledButton>
-                </div>
+                <OrgCard
+                  key={org.name}
+                  image={org.image}
+                  name={org.name}
+                  description={org.description}
+                  stats={[]}
+                  onClick={() => {
+                    setSelectedOrg(org);
+                    setDrawerState(1);
+                  }}
+                />
               ))}
             </Stack>
           </div>
